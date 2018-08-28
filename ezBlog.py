@@ -1,9 +1,8 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
-from flask_wtf.csrf import CSRFProtect
 from flask_login import  LoginManager, login_user, logout_user, current_user, login_required
 from flask_login import UserMixin
 from flask_blogging import SQLAStorage, BloggingEngine
@@ -89,6 +88,8 @@ def login():
                 return redirect(next)
             else:
                 return redirect('/blog/')
+        else:
+            flash(u'用户名或密码错误！', 'warning')
     return render_template('blogging/login.html', form=form)
 
 @app.route("/logout/")

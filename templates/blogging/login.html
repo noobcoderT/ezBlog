@@ -1,19 +1,41 @@
 {% extends "blogging/base.html" %}
 
+{% block title %}
+<title>ezBlog Login</title>
+{% endblock title %}
+
+{% block style %}
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet"/>
+{% endblock style %}
+
+{% block navmenu %}
+   <div id="nav-menu">
+     <a class="current" href="/login/"><i class="fa fa-sign-in">登录</i></a>
+     <a href="/"><i class="fa fa-home">首页</i></a>
+     <a href="/archives/"><i class="fa fa-archive">归档</i></a>
+     <a href="/about/"><i class="fa fa-user">关于</i></a>
+     <a href="/atom.xml"><i class="fa fa-rss">订阅</i></a>
+   </div>
+ {% endblock navmenu %}
+
 {% block post %}
-<div class="content-wrap">
-  <div id="content" class="content">
-    <form action="{{ url_for("login") }}" method="POST">
-      <p>User Name:<br>
-        <input type="text" name="username" /><br>
-      </p>
-      <p>Password:</br>
-        <input type="password" name="password" /><br>
-      </p>
-      <p><input type="checkbox" name="remember_me"/>Remember Me</p>
-      {{ form.csrf_token }}
-      <p><input type="submit" value="Sign In"></p>
-    </form>
+<div class="pure-u-1">
+  <div class="content_container">
+    <div class="content-wrap">
+      <div id="content" class="content">
+        <form action="{{ url_for("login") }}" method="POST" style="margin-left:30%;margin-right:30%">
+          <p>用户名:<br>
+            <input type="text" name="username" style="width:100%" /><br>
+          </p>
+          <p>密码:</br>
+            <input type="password" name="password" style="width:100%" /><br>
+          </p>
+          <p><input type="checkbox" name="remember_me" />记住我</p>
+          {{ form.csrf_token }}
+          <p><input type="submit" value="登录" style="width:100%"></p>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock post %}

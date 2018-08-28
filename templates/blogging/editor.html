@@ -3,31 +3,39 @@
   <link rel="stylesheet" href="/static/libs/editor.md/css/style.css" />
   <link rel="stylesheet" href="/static/libs/editor.md/css/editormd.css" />
 {% endblock extrastyle %}
+
+{% block navmenu %}
+   <div id="nav-menu">
+     {% if current_user.is_authenticated %}
+     <a class="current" href="{{ url_for('blogging.editor') }}"><i class="fa fa-plus-circle">写博客</i></a>
+     {% endif %}
+     <a href="/"><i class="fa fa-home">首页</i></a>
+     <a href="/archives/"><i class="fa fa-archive">归档</i></a>
+     <a href="/about/"><i class="fa fa-user">关于</i></a>
+     <a href="/atom.xml"><i class="fa fa-rss">订阅</i></a>
+   </div>
+ {% endblock navmenu %}
+
 {% block post %}
 <div class="pure-u-1">
-  <form class="form-horizontal" action="{{url_for('blogging.editor', post_id=post_id or None)}}" method="POST">
+  <form class="form-horizontal" action="{{url_for('blogging.editor', post_id=post_id or None)}}" method="POST" style="margin-top:10px">
       {{ form.hidden_tag() }}
       <fieldset>
           <!-- Form Name -->
-          <legend>Blog Editor</legend>
+          <legend>Blog Editor</legend></br>
           <!-- Text input-->
           <div class="form-group">
-              <label class="control-label col-md-offset-2  control-label input-md" for="title">
+              <h2 class="control-label col-md-offset-2  control-label input-md" for="title">
                   Title
-              </label>
+              </h2>
               <div class="input-group col-md-8 col-md-offset-2">
-                  {{form.title(placeholder="Title", id="title", class="form-control", required="" )}}
+                  {{form.title(placeholder="Title", id="title", required="", style="width:100%")}}
               </div>
           </div>
-
+          </br>
           <div class="form-group">
               <div id="editormd" class="input-group col-md-8 col-md-offset-2">
                   {{form.text(placeholder="Blog text")}}
-                  <span class="help-block">
-                      {% if config.BLOGGING_ALLOW_FILEUPLOAD %}
-                          <a target="_blank" href="{{ url_for("flask_fileupload.upload") }}">Upload new File</a>
-                      {% endif %}
-                  </span>
               </div>
           </div>
           <!-- Text input-->
@@ -35,9 +43,10 @@
               <label class="col-md-offset-2 control-label" for="tags">Tags</label>
 
               <div class="input-group col-md-8 col-md-offset-2">
-                  {{form.tags(id="tags", placeholder="Comma separated tags", class="form-control input-md", required="")}}
+                  {{form.tags(id="tags", placeholder="Comma separated tags", class="form-control input-md", required="", style="width:100%")}}
               </div>
           </div>
+          </br>
           <!-- draft input-->
           <div class="form-group">
               <div class="col-md-offset-2">
@@ -49,9 +58,10 @@
                   </label>
               </div>
           </div>
+          </br>
           <div class="form-group">
               <div class="col-md-offset-2">
-                  {{ form.submit(id="submit", class="btn btn-primary") }}
+                  {{ form.submit(id="submit", style="width:100%", class="btn btn-primary") }}
               </div>
           </div>
       </fieldset>

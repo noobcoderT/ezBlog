@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0" name="viewport">
+  <meta content="yes" name="apple-mobile-web-app-capable">
+  <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+  <meta content="telephone=no" name="format-detection">
+  <meta name="description" content="Yet an easy Blog">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
+  <link rel="stylesheet" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css">
+  <link rel="stylesheet" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css">
+  <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!--script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script-->
+  <script src="/static/libs/editor.md/js/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/es6-promise/4.1.1/es6-promise.auto.min.js" async></script>
+  {% block meta %}
+  {% endblock meta %}
+  {% block style %}
+  {% endblock style %}
+  <title>
+    {% block title %}
+    {% endblock title %}
+  </title>
+  {% block extrastyle %}
+  {% endblock extrastyle %}
+</head>
+<body>
+  <div class="body_container">
+    <div id="header">
+      <div class="site-name">
+        <h1 class="hidden">ezBlog</h1>
+        <a id="logo" href="/">ezBlog</a>
+        <p class="description">No more than a blog</p>
+      </div>
+      <div id="nav-menu">
+        <a class="current" href="/"><i class="fa fa-home">首页</i></a>
+        <a href="/archives/"><i class="fa fa-archive">归档</i></a>
+        <a href="/about/"><i class="fa fa-user">关于</i></a>
+        <a href="/atom.xml"><i class="fa fa-rss">订阅</i></a>
+      </div>
+    </div>
+    <div class="pure-g" id="layout">
+      <!--div class="pure-u-1 pure-u-md-3-4"-->
+      {% block message %}
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <div id="alert_div" class="alert alert-{{ category }} alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              {{ message }}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      {% endif %}
+      {% endwith %}
+      {% endblock message %}
+      <!--div class="content_container"-->
+        {% block post %}
+        {% endblock post%}
+      <!--/div-->
+      <!--/div-->
+
+      <!--div class="pure-u-1-4 hidden_mid_and_down">
+        <div id="sidebar"-->
+          <!--div class="widget">
+            <form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank">
+              <input type="text" name="q" maxlength="20" placeholder="Search">
+              <input type="hidden" name="sitesearch" value="{{ config.BLOGGING_SITEURL}}">
+            </form>
+          </div-->
+          {% block sidebar %}
+          {% endblock sidebar %}
+        <!--/div>
+      </div-->
+      <div class="pure-u-1 pure-u-md-3-4">
+        <div id="footer">
+          Copyright © 2018 <a href="/" rel="nofollow">Ziv | </a>
+          <a rel="nofollow" target="_blank" href="http://traceme.space/">Personal BLog</a>
+          <br>
+        </div>
+      </div>
+    </div>
+    <a class="show" id="rocket" href="#top"></a>
+    {% block js %}
+    <script src="/static/js/totop.js" async></script>
+    <!--script src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script>
+    <script src="/static/js/fancybox.js" async></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"-->
+    <script src="/static/js/codeblock-resizer.js"></script>
+    <script src="/static/js/smartresize.js"></script>
+    {% endblock js %}
+    {% block extrajs %}
+    {% endblock extrajs %}
+  </div>
+</body>
+</html>

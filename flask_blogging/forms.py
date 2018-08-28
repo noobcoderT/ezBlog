@@ -8,4 +8,5 @@ class BlogEditor(FlaskForm):
     text = TextAreaField("text", validators=[DataRequired()])
     tags = StringField("tags", validators=[DataRequired()])
     draft = BooleanField("draft", default=False)
+    public = BooleanField("public", default=True)
     submit = SubmitField("submit")

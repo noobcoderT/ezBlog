@@ -126,7 +126,7 @@ class SQLAStorage(Storage):
     def engine(self):
         return self._engine
 
-    def save_post(self, title, text, user_id, tags, draft=False,
+    def save_post(self, title, text, user_id, tags, draft=False, public=None,
                   post_date=None, last_modified_date=None, meta_data=None,
                   post_id=None):
         """
@@ -181,7 +181,8 @@ class SQLAStorage(Storage):
                         self._post_table.c.id == post_id)
                 post_statement = post_statement.values(
                     title=title, text=text, post_date=post_date,
-                    last_modified_date=last_modified_date, draft=draft
+                    last_modified_date=last_modified_date, draft=draft,
+                    public=public
                 )
 
                 post_result = conn.execute(post_statement)
@@ -496,7 +497,6 @@ class SQLAStorage(Storage):
                     # if 1 then make it a draft
                     sqla.Column("draft", sqla.SmallInteger, default=0),
                     sqla.Column("public", sqla.SmallInteger, default=1),
-                    sqla.Column("views", sqla.BigInteger, default=0),
                     info=self._info
 
                 )

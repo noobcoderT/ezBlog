@@ -1,0 +1,2 @@
+# ezBlog
+An easy Blog

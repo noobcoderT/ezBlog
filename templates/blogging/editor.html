@@ -1,4 +1,9 @@
 {% extends 'blogging/base.html' %}
+
+{% block title %}
+<title>Edit Blog</title>
+{% endblock title %}
+
 {% block extrastyle %}
   <link rel="stylesheet" href="/static/libs/editor.md/css/style.css" />
   <link rel="stylesheet" href="/static/libs/editor.md/css/editormd.css" />
@@ -50,9 +55,9 @@
           <!-- draft input-->
           <div class="form-group">
               <div class="col-md-offset-2">
-                  <label>
+                  <!--label>
                       {{form.draft(id="draft")}} draft?
-                  </label>
+                  </label-->
                   <label>
                       {{form.public(id="public")}} public?
                   </label>

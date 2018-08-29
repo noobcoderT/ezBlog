@@ -7,6 +7,11 @@
   <!--link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet"/-->
 {% endblock style %}
 
+{% block extrastyle %}
+  <!--link rel="stylesheet" href="/static/libs/editor.md/css/style.css" />
+  <link rel="stylesheet" href="/static/libs/editor.md/css/editormd.css" /-->
+{% endblock extrastyle %}
+
 {% block navmenu %}
   <div id="nav-menu">
     {% if meta.is_user_blogger %}
@@ -29,6 +34,8 @@
     {% endif %}
 
     {% for post in posts %}
+      <!--div>{{ post.text|truncate(60) }}</div-->
+      {% if ((meta.is_user_blogger) or (post.public)) %}
       <div class="post">
         <h1 class="post-title">
           <a href="{{ post.url }}">{{ post.title }}</a>
@@ -39,33 +46,65 @@
           <a href="{{ url_for('blogging.posts_by_author', user_id=post.user_id)}}">
             <em>{{post.user_name}}</em>
           </a>
+          {% if post.editable %}
+          &nbsp;
+          <a href="{{ url_for('blogging.editor', post_id=post.post_id) }}" id="edit">
+              <span class="fa fa-edit">编辑</span>
+          </a>
+          {% endif %}
         </p>
-        <div class="post-content"></div>
+        <div class="post-content">
+            <div id="post-digest-{{loop.index}}">
+              <textarea style="display:none">{{ post.text|truncate(80) }}</textarea>
+          </div>
+        </div>
         <p class="readmore">
           <a href="{{ post.url }}">阅读全文</a>
         </p>
         </br>
         <hr>
       </div>
+      {% endif %}
     {% endfor %}
-    <div>{{ meta.max_pages }}</div>
-    {% if ((meta)  and (meta.max_pages>1)) %}
-        <div class="row">
-            <div class="col-md-12">
-                <ul class="pager">
-                    {% if meta.pagination.prev_page %}
-                        <li><a href="{{meta.pagination.prev_page}}">&laquo; Prev</a></li>
-                    {% else %}
-                        <li class="disabled"><a href="">&laquo; Prev</a></li>
-                    {% endif %}
-                    {% if meta.pagination.next_page %}
-                        <li><a href="{{meta.pagination.next_page}}">Next &raquo;</a></li>
-                    {% else %}
-                        <li class="disabled"><a href="">Next &raquo;</a></li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
+    <nav class="page-navigator">
+    {% if (meta) and (meta.max_pages>=1) %}
+      {% if (meta.pagination.prev_page!=None) %}
+        <a class="extend prev" rel="prev" href="/blog/{{ meta.offset|int }}/{{ (meta.page-1)|int
+            }}">上一页</a>
+      {% endif %}
+      {% if (meta.page==1) %}
+        <span class="page-number current">1</span>
+      {% else %}
+        <a class="page-number" href="/blog/{{ meta.offset|int }}/1">1</a>
+      {% endif %}
+      {% if (meta.page-3 > 1)%}
+      <span class="space">&hellip;</span>
+      {% endif %}
+      {% for n in (meta.page-2, meta.page-1, meta.page, meta.page+1, meta.page+2) %}
+        {% if ((n>1) and (n<meta.max_pages)) %}
+          {% if (n==meta.page) %}
+          <span class="page-number current">{{ n|int }}</span>
+          {% else %}
+          <a class="page-number" href="/blog/{{ meta.offset|int }}/{{ n|int }}">{{ n|int }}</a>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+      {% if (meta.page+3 < meta.max_pages) %}
+      <span class="space">&hellip;</span>
+      {% endif %}
+      {% if (meta.max_pages>1) %}
+        {% if (meta.page==meta.max_pages) %}
+        <span class="page-number current">{{ meta.max_pages|int }}</span>
+        {% else %}
+        <a class="page-number" href="/blog/{{ meta.offset|int }}/{{ meta.max_pages|int }}">{{
+            meta.max_pages|int }}</a>
+        {% endif %}
+      {% endif %}
+      {% if (meta.pagination.next_page!=None) %}
+        <a class="extend next" rel="next" href="/blog/{{ meta.offset|int }}/{{ (meta.page+1)|int
+            }}">下一页</a>
+      {% endif %}
+    </nav>
     {% endif %}
   </div>
 </div>
@@ -152,3 +191,22 @@
     </div>
   </div>
 {% endblock sidebar %}
+
+{% block extrajs %}
+<script src="/static/js/marked.min.js"></script>
+<script src="/static/js/prettify.min.js"></script>
+<script src="/static/libs/editor.md/js/jquery.min.js"></script>
+<script src="/static/libs/editor.md/js/editormd.min.js"></script>
+{% for post in posts %}
+<script type="text/javascript">
+  var viewEditor;
+  $(function(){
+    viewEditor = editormd.markdownToHTML("post-digest-"+{{loop.index}}, {
+      path       : "/static/libs/editor.md/lib/",
+      tocm       : false,
+      toContainer: "",
+      });
+  });
+</script>
+{% endfor %}
+{% endblock extrajs %}

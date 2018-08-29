@@ -217,7 +217,7 @@ class SQLAStorage(Storage):
                     r = dict(post_id=post_result[0], title=post_result[1],
                              text=post_result[2], post_date=post_result[3],
                              last_modified_date=post_result[4],
-                             draft=post_result[5])
+                             draft=post_result[5],public=post_result[6])
                     # get the tags
                     tag_statement = sqla.select([self._tag_table.c.text]). \
                         where(

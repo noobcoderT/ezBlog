@@ -1,70 +1,188 @@
 {% extends "blogging/base.html" %}
+
 {% block meta %}
     {% include 'blogging/metatags.html' %}
 {% endblock meta %}
+
 {% block title %}
-    {{post.title}}
+<title>{{post.title}}</title>
 {% endblock title %}
 
-{% block main %}
-{% if meta.is_user_blogger %}
-    <div class="modal fade" id="confirmModal" >
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title">Are you sure you want to delete this post?</h4>
-                </div>
-                <div class="modal-footer">
-                    <form action="{{ url_for('blogging.delete', post_id=post.post_id) }}" method="POST">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <input type="submit" value="Yes" class="btn btn-primary" id="confirmedDelete"/>
-                    </form>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-    <div class="pull-right">
-    {% if post.editable %}
-        <a href="#confirmModal" data-toggle="modal" id="delete">
-            <span class="glyphicon glyphicon-trash"></span>&nbsp;Delete
-        </a>&nbsp&nbsp&nbsp&nbsp
+{% block extrastyle %}
+  <link rel="stylesheet" href="/static/libs/editor.md/css/style.css" />
+  <link rel="stylesheet" href="/static/libs/editor.md/css/editormd.css" />
+{% endblock extrastyle %}
 
-        <a href="{{ url_for('blogging.editor', post_id=post.post_id) }}" id="edit">
-            <span class="glyphicon glyphicon-edit"></span>&nbsp;Edit
-        </a>&nbsp&nbsp&nbsp&nbsp
+{% block navmenu %}
+  <div id="nav-menu">
+    {% if meta.is_user_blogger %}
+    <a href="{{ url_for('blogging.editor') }}"><i class="fa fa-plus-circle">写博客</i></a>
     {% endif %}
-        <a href="{{ url_for('blogging.editor') }}" id="new">
-            <span class="glyphicon glyphicon-plus"></span>&nbsp;New
-        </a>
-    </div>
-{% endif %}
+    <a href="/"><i class="fa fa-home">首页</i></a>
+    <a href="/archives/"><i class="fa fa-archive">归档</i></a>
+    <a href="/about/"><i class="fa fa-user">关于</i></a>
+    <a href="/atom.xml"><i class="fa fa-rss">订阅</i></a>
+  </div>
+{% endblock navmenu %}
 
-
-  <a href="{{ url_for('blogging.page_by_id', post_id=post.post_id, slug=post.slug) }}">
-      <h1>{{ post.title }}</h1>
-  </a>
-    <p>Posted by <a href="{{ url_for('blogging.posts_by_author', user_id=post.user_id)}}"><em>{{post.user_name}}</em></a>
-on {{post.post_date.strftime('%d %b, %Y')}}</p>
-    {{post.rendered_text | safe}}
-
-   <br>
-  <!-- article tags-->
-  {% if post.tags %}
-    <span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;
-    {% for tag in post.tags %}
-        <span class="label">
+{% block post %}
+<div class="pure-u-1 pure-u-md-3-4">
+  <div class="content_container">
+    <div class="post">
+      <h1 class="post-title">
+        {{ post.title }}
+      </h1>
+      <div class="post-meta"></div>
+        <p style="margin:15px 0 0">
+          {{post.post_date.strftime('%Y.%b.%d')}} by
+          <a href="{{url_for('blogging.posts_by_author', user_id=post.user_id)}}">
+            <em>{{post.user_name}}</em>
+          </a>
+          {% if post.editable %}
+          &nbsp;
+          <a href="{{ url_for('blogging.editor', post_id=post.post_id) }}" id="edit">
+              <span class="fa fa-edit">编辑</span>
+          </a>
+          &nbsp;
+          <a href="#confirmModal" data-toggle="modal" id="delete" onclick="confirmDelete()">
+              <span class="fa fa-trash">删除</span>
+          </a>
+          {% endif %}
+        </p>
+      <div class="post-content">
+        <div id="editor-view">
+          <textarea style="display:none">{{ post.text }}</textarea>
+        </div>
+      </div>
+      <!-- article tags-->
+      {% if post.tags %}
+        <div class="tags">
+        {% for tag in post.tags %}
           <a href="{{ url_for('blogging.posts_by_tag', tag=tag.lower(), count=10, offset=0) }}">
           {{ tag }}
           </a>
-        </span>&nbsp;&nbsp;
-    {% endfor %}
-    <br>
-  {% endif %}
-  <br>
-  {% include "blogging/social_links.html" %}
+        </div>
+        {% endfor %}
+      {% endif %}
+    </div>
   <hr>
-{% include "blogging/disqus.html" %}
-{% endblock main %}
+  </div>
+</div>
+{% endblock post %}
+
+{% block sidebar %}
+  <div class="pure-u-1-4 hidden_mid_and_down">
+    <div id="sidebar">
+      <div class="widget">
+        <form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank">
+          <input type="text" name="q" maxlength="20" placeholder="Search">
+          <input type="hidden" name="sitesearch" value="{{ config.BLOGGING_SITEURL}}">
+        </form>
+      </div>
+      <div class="widget">
+        <div class="widget-title">
+          <i class="fa fa-tags">标签</i>
+        </div>
+        <div class="tagcloud">
+            <a href="/tags/wudaokou/" style="font-size:15px">五道口</a>
+            <a href="/tags/emotion/" style="font-size:15px">心情</a>
+            <a href="/tags/music/" style="font-size:15px">音乐</a>
+            <a href="/tags/sports/" style="font-size:15px">体育</a>
+            <a href="/tags/NBA/" style="font-size:15px">NBA</a>
+            <a href="/tags/technology/" style="font-size:15px">技术</a>
+            <a href="/tags/Internet/" style="font-size:15px">Internet</a>
+            <a href="/tags/Typecho/" style="font-size:15px">Typecho</a>
+            <a href="/tags/movie/" style="font-size:15px">电影</a>
+            <a href="/tags/manuscript/" style="font-size:15px">随笔</a>
+            <a href="/tags/eat/" style="font-size:15px">吃</a>
+            <a href="/tags/jeffery/" style="font-size:15px">李杨</a>
+            <a href="/tags/Wordpress/" style="font-size:15px">Wordpress</a>
+            <a href="/tags/blog/" style="font-size:15px">博客</a>
+            <a href="/tags/GitHub/" style="font-size:15px">GitHub</a>
+            <a href="/tags/Hexo/" style="font-size:15px">Hexo</a>
+            <a href="/tags/duoshuo/" style="font-size:15px">多说</a>
+            <a href="/tags/VPS/" style="font-size:15px">VPS</a>
+            <a href="/tags/host/" style="font-size:15px">主机</a>
+        </div>
+      </div>
+      <div class="widget">
+        <div class="widget-title">
+            <i class="fa fa-file-o">最近文章</i>
+        </div>
+        <ul class="post-list">
+            <li class="post-list-item">
+                <a class="post-list-link" href="/emotion/stay-alone.html">独处</a>
+            </li>
+            <li class="post-list-item">
+                <a class="post-list-link" href="/emotion/just-say-something.html">杂谈</a>
+            </li>
+            <li class="post-list-item">
+                <a class="post-list-link" href="/emotion/forget-me.html">忘了我</a>
+            </li>
+            <li class="post-list-item">
+                <a class="post-list-link" href="/emotion/dishearted.html">继续丧</a>
+            </li>
+            <li class="post-list-item">
+                <a class="post-list-link" href="/emotion/caprice2.html">一点随想II</a>
+            </li>
+            <li class="post-list-item">
+                <a class="post-list-link" href="/emotion/about-memory.html">关于记忆</a>
+            </li>
+            <li class="post-list-item">
+                <a class="post-list-link" href="/emotion/find-myself.html">找自己II</a>
+            </li>
+            <li class="post-list-item">
+                <a class="post-list-link" href="/emotion/out-of-instinct.html">出于本能</a>
+            </li>
+            <li class="post-list-item">
+                <a class="post-list-link" href="/emotion/just-breath.html">活着而已</a>
+            </li>
+            <li class="post-list-item">
+                <a class="post-list-link" href="/emotion/last-spring.html">春去春又来</a>
+            </li>
+        </ul>
+      </div>
+      <div class="widget">
+        <div class="widget-title">
+            <i class="fa fa-external-link">友情链接</i>
+        </div>
+        <ul></ul>
+        <a href="http://yalanlife.net/" title="雅岚文艺博客" target="_blank">雅岚文艺博客</a>
+      </div>
+    </div>
+  </div>
+{% endblock sidebar %}
+
+{% block extrajs %}
+<script src="/static/js/marked.min.js"></script>
+<script src="/static/js/prettify.min.js"></script>
+<script src="/static/libs/editor.md/js/jquery.min.js"></script>
+<script src="/static/libs/editor.md/js/editormd.min.js"></script>
+<script type="text/javascript">
+  var viewEditor;
+  $(function(){
+    viewEditor = editormd.markdownToHTML("editor-view", {
+        path       : "/static/libs/editor.md/lib/",
+        tocm       : true,
+        toContainer: "",
+    });
+  });
+</script>
+<script type="text/javascript">
+  function confirmDelete(){
+    var r = confirm("确认删除吗？");
+    if(r == true){
+      $.ajax({
+        type: 'POST',
+        url: '{{config.BLOGGING_SITEURL}}{{url_for('blogging.delete', post_id=post.post_id)}}',
+        success: function () {
+          window.location.href='{{config.BLOGGING_SITEURL}}';
+        },
+        error: function (error) {
+          console.log("删除错误")
+        }
+      });
+    }
+  }
+</script>
+{% endblock extrajs %}

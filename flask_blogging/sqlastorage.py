@@ -288,6 +288,17 @@ class SQLAStorage(Storage):
         posts = [self.get_post_by_id(pid[0]) for pid in result]
         return posts
 
+    def get_tags(self):
+        with self._engine.begin() as conn:
+            try:
+                select_statement = sqla.select([self._tag_table.c.text])
+                result = conn.execute(select_statement).fetchall()
+            except Exception as e:
+                self._logger.exception(str(e))
+                result = []
+        tags = [tag[0] for tag in result]
+        return tags
+
     def count_posts(self, tag=None, user_id=None, include_draft=False):
         """
         Returns the total number of posts for the give filter

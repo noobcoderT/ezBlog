@@ -130,8 +130,11 @@ def index(count, page):
         blogging_engine.process_post(post, render=render)
     index_posts_processed.send(blogging_engine.app, engine=blogging_engine,
                                posts=posts, meta=meta)
+    recent_posts = storage.get_posts(count=5, offset=0, include_draft=False,
+                              tag=None, user_id=None, recent=True)
+    tags = storage.get_tags()
     return render_template("blogging/index.html", posts=posts, meta=meta,
-                           config=config)
+                           config=config, tags=tags, recent_posts=recent_posts)
 
 
 def page_by_id(post_id, slug):
@@ -151,8 +154,12 @@ def page_by_id(post_id, slug):
         blogging_engine.process_post(post, render=render)
         page_by_id_processed.send(blogging_engine.app, engine=blogging_engine,
                                   post=post, meta=meta)
+        recent_posts = storage.get_posts(count=5, offset=0, include_draft=False,
+                                  tag=None, user_id=None, recent=True)
+        tags = storage.get_tags()
+        print recent_posts
         return render_template("blogging/page.html", post=post, config=config,
-                               meta=meta)
+                               meta=meta, tags=tags, recent_posts=recent_posts)
     else:
         flash("The page you are trying to access is not valid!", "warning")
         return redirect(url_for("blogging.index"))
@@ -180,8 +187,11 @@ def posts_by_tag(tag, count, page):
         posts_by_tag_processed.send(blogging_engine.app,
                                     engine=blogging_engine,
                                     posts=posts, meta=meta)
+        recent_posts = storage.get_posts(count=5, offset=0, include_draft=False,
+                                  tag=None, user_id=None, recent=True)
+        tags = storage.get_tags()
         return render_template("blogging/index.html", posts=posts, meta=meta,
-                               config=config)
+                               config=config, tags=tags, recent_posts=recent_posts)
     else:
         flash("No posts found for this tag!", "warning")
         return redirect(url_for("blogging.index", post_id=None))
@@ -210,8 +220,11 @@ def posts_by_author(user_id, count, page):
         posts_by_author_processed.send(blogging_engine.app,
                                        engine=blogging_engine, posts=posts,
                                        meta=meta)
+        recent_posts = storage.get_posts(count=5, offset=0, include_draft=False,
+                                  tag=None, user_id=None, recent=True)
+        tags = storage.get_tags()
         return render_template("blogging/index.html", posts=posts, meta=meta,
-                               config=config)
+                               config=config, tags=tags, recent_posts=recent_posts)
     else:
         flash("No posts found for this user!", "warning")
         return redirect(url_for("blogging.index", post_id=None))

@@ -19,9 +19,9 @@
     <a href="{{ url_for('blogging.editor') }}"><i class="fa fa-plus-circle">写博客</i></a>
     {% endif %}
     <a href="/"><i class="fa fa-home">首页</i></a>
-    <a href="/archives/"><i class="fa fa-archive">归档</i></a>
-    <a href="/about/"><i class="fa fa-user">关于</i></a>
-    <a href="/atom.xml"><i class="fa fa-rss">订阅</i></a>
+    <a href="/blog/archives/"><i class="fa fa-archive">归档</i></a>
+    <a href="/blog/about/"><i class="fa fa-user">关于</i></a>
+    <a href="{{url_for('blogging.sitemap')}}"><i class="fa fa-rss">订阅</i></a>
   </div>
 {% endblock navmenu %}
 
@@ -34,7 +34,7 @@
       </h1>
       <div class="post-meta"></div>
         <p style="margin:15px 0 0">
-          {{post.post_date.strftime('%Y.%b.%d')}} by
+          {{post.post_date.strftime('%Y.%m.%d')}} by
           <a href="{{url_for('blogging.posts_by_author', user_id=post.user_id)}}">
             <em>{{post.user_name}}</em>
           </a>
@@ -50,6 +50,7 @@
           {% endif %}
         </p>
       <div class="post-content">
+        <div>{{ post.text }}</div>
         <div id="editor-view">
           <textarea style="display:none">{{ post.text }}</textarea>
         </div>
@@ -61,8 +62,8 @@
           <a href="{{ url_for('blogging.posts_by_tag', tag=tag.lower(), count=10, offset=0) }}">
           {{ tag }}
           </a>
-        </div>
         {% endfor %}
+        </div>
       {% endif %}
     </div>
   <hr>
@@ -89,7 +90,7 @@
           {% endfor %}
         </div>
       </div>
-      <div class="widget">
+      <!--div class="widget">
         <div class="widget-title">
             <i class="fa fa-file-o">最近文章</i>
         </div>
@@ -100,13 +101,15 @@
             </li>
           {% endfor %}
         </ul>
-      </div>
+      </div-->
       <div class="widget">
         <div class="widget-title">
             <i class="fa fa-external-link">友情链接</i>
         </div>
+        {% for link in config.BLOGGING_LINKS %}
         <ul></ul>
-        <a href="http://yalanlife.net/" title="雅岚文艺博客" target="_blank">雅岚文艺博客</a>
+        <a href="{{link.link}}" title="{{link.name}}" target="_blank">{{link.name}}</a>
+        {% endfor %}
       </div>
     </div>
   </div>

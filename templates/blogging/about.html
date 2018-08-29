@@ -1,0 +1,74 @@
+{% extends "blogging/base.html" %}
+{% block title %}
+<title>About</title>
+{% endblock title %}
+
+{% block navmenu %}
+  <div id="nav-menu">
+    {% if meta.is_user_blogger %}
+    <a href="{{ url_for('blogging.editor') }}"><i class="fa fa-plus-circle">写博客</i></a>
+    {% endif %}
+    <a href="/"><i class="fa fa-home">首页</i></a>
+    <a href="/blog/archives/"><i class="fa fa-archive">归档</i></a>
+    <a class="current" href="/blog/about/"><i class="fa fa-user">关于</i></a>
+    <a href="{{url_for('blogging.sitemap')}}"><i class="fa fa-rss">订阅</i></a>
+  </div>
+{% endblock navmenu %}
+
+{% block post %}
+<div class="pure-u-1 pure-u-md-3-4">
+  <div class="content_container">
+      <div class="post">
+        <h1 class="post-title">
+          关于
+        </h1>
+        <div class="post-content">
+        </div>
+      </div>
+  </div>
+</div>
+{% endblock post %}
+{% block sidebar %}
+  <div class="pure-u-1-4 hidden_mid_and_down">
+    <div id="sidebar">
+      <div class="widget">
+        <form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank">
+          <input type="text" name="q" maxlength="20" placeholder="Google Search">
+          <input type="hidden" name="sitesearch" value="{{ config.BLOGGING_SITEURL}}">
+        </form>
+      </div>
+      <div class="widget">
+        <div class="widget-title">
+          <i class="fa fa-tags">标签</i>
+        </div>
+        <div class="tagcloud">
+        {% for tag in tags %}
+        <a href="{{url_for('blogging.posts_by_tag', tag=tag)}}" style="font-size:15px">{{tag}}</a>
+        {% endfor %}
+        </div>
+      </div>
+      <!--div class="widget">
+        <div class="widget-title">
+            <i class="fa fa-file-o">最近文章</i>
+        </div>
+        <ul class="post-list">
+            {% for post in recent_posts %}
+            <li class="post-list-item">
+                <a class="post-list-link" href="{{ post.url }}">{{ post.title }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+      </div-->
+      <div class="widget">
+        <div class="widget-title">
+            <i class="fa fa-external-link">友情链接</i>
+        </div>
+        {% for link in config.BLOGGING_LINKS %}
+        <ul></ul>
+        <a href="{{link.link}}" title="{{link.name}}" target="_blank">{{link.name}}</a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock sidebar %}
+

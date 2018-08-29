@@ -290,13 +290,15 @@ class SQLAStorage(Storage):
 
     def get_tags(self):
         with self._engine.begin() as conn:
+            result = []
             try:
+                select_statement = sqla.select([self._tag_posts_table.c.tag_id])
+                tag_id = conn.execute(select_statement).fetchall()
                 select_statement = sqla.select([self._tag_table.c.text])
                 result = conn.execute(select_statement).fetchall()
             except Exception as e:
                 self._logger.exception(str(e))
-                result = []
-        tags = [tag[0] for tag in result]
+        tags = [result[i[0]-1][0] for i in tag_id]
         return tags
 
     def count_posts(self, tag=None, user_id=None, include_draft=False):

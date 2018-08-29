@@ -17,8 +17,8 @@
     {% if meta.is_user_blogger %}
     <a href="{{ url_for('blogging.editor') }}"><i class="fa fa-plus-circle">写博客</i></a>
     {% endif %}
-    <a class="current" href="/"><i class="fa fa-home">首页</i></a>
-    <a href="/blog/archives/"><i class="fa fa-archive">归档</i></a>
+    <a href="/"><i class="fa fa-home">首页</i></a>
+    <a class="current" href="/blog/archives/"><i class="fa fa-archive">归档</i></a>
     <a href="/blog/about/"><i class="fa fa-user">关于</i></a>
     <a href="{{url_for('blogging.sitemap')}}"><i class="fa fa-rss">订阅</i></a>
   </div>
@@ -51,10 +51,6 @@
           <a href="{{ url_for('blogging.editor', post_id=post.post_id) }}" id="edit">
               <span class="fa fa-edit">编辑</span>
           </a>
-          &nbsp;
-           <a href="#confirmModal" data-toggle="modal" id="delete" onclick="confirmDelete({{post.post_id}})">
-             <span class="fa fa-trash">删除</span>
-           </a>
           {% endif %}
         </p>
         <div class="post-content">
@@ -174,22 +170,4 @@
   });
 </script>
 {% endfor %}
-<script type="text/javascript">
-   function confirmDelete(pid){
-     var url_to_delete = '{{config.BLOGGING_SITEURL}}/blog/delete/'+pid+'/';
-     var r = confirm("确认删除吗？");
-     if(r == true){
-       $.ajax({
-         type: 'POST',
-         url: url_to_delete,
-         success: function () {
-           window.location.href='{{config.BLOGGING_SITEURL}}';
-         },
-         error: function (error) {
-           console.log("删除错误")
-         }
-       });
-     }
-   }
- </script>
 {% endblock extrajs %}

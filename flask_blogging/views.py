@@ -130,12 +130,59 @@ def index(count, page):
         blogging_engine.process_post(post, render=render)
     index_posts_processed.send(blogging_engine.app, engine=blogging_engine,
                                posts=posts, meta=meta)
-    recent_posts = storage.get_posts(count=5, offset=0, include_draft=False,
-                              tag=None, user_id=None, recent=True)
     tags = storage.get_tags()
     return render_template("blogging/index.html", posts=posts, meta=meta,
-                           config=config, tags=tags, recent_posts=recent_posts)
+                           config=config, tags=tags)
 
+def about(count, page):
+    blogging_engine = _get_blogging_engine(current_app)
+    storage = blogging_engine.storage
+    config = blogging_engine.config
+    count = count or config.get("BLOGGING_POSTS_PER_PAGE", 10)
+
+    meta = _get_meta(storage, count, page)
+    offset = meta["offset"]
+    meta["is_user_blogger"] = _is_blogger(blogging_engine.blogger_permission)
+    meta["count"] = count
+    meta["page"] = page
+
+    render = config.get("BLOGGING_RENDER_TEXT", True)
+    posts = storage.get_posts(count=count, offset=offset, include_draft=False,
+                              tag=None, user_id=None, recent=True)
+    index_posts_fetched.send(blogging_engine.app, engine=blogging_engine,
+                             posts=posts, meta=meta)
+    for post in posts:
+        blogging_engine.process_post(post, render=render)
+    index_posts_processed.send(blogging_engine.app, engine=blogging_engine,
+                               posts=posts, meta=meta)
+    tags = storage.get_tags()
+    return render_template("blogging/about.html", posts=posts, meta=meta,
+                           config=config, tags=tags)
+
+def archives(count, page):
+    blogging_engine = _get_blogging_engine(current_app)
+    storage = blogging_engine.storage
+    config = blogging_engine.config
+    count = count or config.get("BLOGGING_POSTS_PER_PAGE", 10)
+
+    meta = _get_meta(storage, count, page)
+    offset = meta["offset"]
+    meta["is_user_blogger"] = _is_blogger(blogging_engine.blogger_permission)
+    meta["count"] = count
+    meta["page"] = page
+
+    render = config.get("BLOGGING_RENDER_TEXT", True)
+    posts = storage.get_posts(count=count, offset=offset, include_draft=False,
+                              tag=None, user_id=None, recent=True)
+    index_posts_fetched.send(blogging_engine.app, engine=blogging_engine,
+                             posts=posts, meta=meta)
+    for post in posts:
+        blogging_engine.process_post(post, render=render)
+    index_posts_processed.send(blogging_engine.app, engine=blogging_engine,
+                               posts=posts, meta=meta)
+    tags = storage.get_tags()
+    return render_template("blogging/archives.html", posts=posts, meta=meta,
+                           config=config, tags=tags)
 
 def page_by_id(post_id, slug):
     blogging_engine = _get_blogging_engine(current_app)
@@ -154,12 +201,9 @@ def page_by_id(post_id, slug):
         blogging_engine.process_post(post, render=render)
         page_by_id_processed.send(blogging_engine.app, engine=blogging_engine,
                                   post=post, meta=meta)
-        recent_posts = storage.get_posts(count=5, offset=0, include_draft=False,
-                                  tag=None, user_id=None, recent=True)
         tags = storage.get_tags()
-        print recent_posts
         return render_template("blogging/page.html", post=post, config=config,
-                               meta=meta, tags=tags, recent_posts=recent_posts)
+                               meta=meta, tags=tags)
     else:
         flash("The page you are trying to access is not valid!", "warning")
         return redirect(url_for("blogging.index"))
@@ -187,11 +231,9 @@ def posts_by_tag(tag, count, page):
         posts_by_tag_processed.send(blogging_engine.app,
                                     engine=blogging_engine,
                                     posts=posts, meta=meta)
-        recent_posts = storage.get_posts(count=5, offset=0, include_draft=False,
-                                  tag=None, user_id=None, recent=True)
         tags = storage.get_tags()
         return render_template("blogging/index.html", posts=posts, meta=meta,
-                               config=config, tags=tags, recent_posts=recent_posts)
+                               config=config, tags=tags)
     else:
         flash("No posts found for this tag!", "warning")
         return redirect(url_for("blogging.index", post_id=None))
@@ -220,11 +262,9 @@ def posts_by_author(user_id, count, page):
         posts_by_author_processed.send(blogging_engine.app,
                                        engine=blogging_engine, posts=posts,
                                        meta=meta)
-        recent_posts = storage.get_posts(count=5, offset=0, include_draft=False,
-                                  tag=None, user_id=None, recent=True)
         tags = storage.get_tags()
         return render_template("blogging/index.html", posts=posts, meta=meta,
-                               config=config, tags=tags, recent_posts=recent_posts)
+                               config=config, tags=tags)
     else:
         flash("No posts found for this user!", "warning")
         return redirect(url_for("blogging.index", post_id=None))
@@ -326,7 +366,6 @@ def delete(post_id):
         flash("You do not have permissions to delete posts", "warning")
         return redirect(url_for("blogging.index", post_id=None))
 
-
 def sitemap():
     blogging_engine = _get_blogging_engine(current_app)
     storage = blogging_engine.storage
@@ -410,6 +449,16 @@ def create_blueprint(import_name, blogging_engine):
     blog_app.add_url_rule("/<int:count>/", defaults={"page": 1},
                           view_func=index_func)
     blog_app.add_url_rule("/<int:count>/<int:page>/", view_func=index_func)
+
+    # register about
+    about_func = cached_func(blogging_engine, about)
+    blog_app.add_url_rule("/about/", defaults={"count": None, "page": 1},
+                          view_func=about_func)
+
+    # register archives
+    archives_func = cached_func(blogging_engine, archives)
+    blog_app.add_url_rule("/archives/", defaults={"count": None, "page": 1},
+                          view_func=archives_func)
 
     # register page_by_id
     page_by_id_func = cached_func(blogging_engine, page_by_id)

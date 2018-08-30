@@ -160,6 +160,8 @@ def about(count, page):
                            config=config, tags=tags)
 
 def archives(count, page):
+    years = []
+    year_dict = {}
     blogging_engine = _get_blogging_engine(current_app)
     storage = blogging_engine.storage
     config = blogging_engine.config
@@ -180,9 +182,19 @@ def archives(count, page):
         blogging_engine.process_post(post, render=render)
     index_posts_processed.send(blogging_engine.app, engine=blogging_engine,
                                posts=posts, meta=meta)
+    for post in posts:
+        year = post["post_date"].strftime("%Y")
+        if year not in year_dict:
+            year_dict[year] = []
+        year_dict[year].append(post)
+    for year in year_dict.keys():
+        tmp_dict = {"year":year, "posts":year_dict[year]}
+        years.append(tmp_dict)
+    if len(years) == 0:
+        years = [{"year":"", "posts":[]}]
     tags = storage.get_tags()
     return render_template("blogging/archives.html", posts=posts, meta=meta,
-                           config=config, tags=tags)
+                           config=config, tags=tags, years=years)
 
 def page_by_id(post_id, slug):
     blogging_engine = _get_blogging_engine(current_app)

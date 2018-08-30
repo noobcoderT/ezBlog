@@ -27,45 +27,24 @@
 {% block post %}
 <div class="pure-u-1 pure-u-md-3-4">
   <div class="content_container">
-    {% if alert %}
-        <div class="alert alert-{{alert.type}}">
-            <strong>{{ alert.type }}</strong> {{ alert.message }}
-        </div>
-    {% endif %}
-
-    {% for post in posts %}
-      <!--div>{{ post.text|truncate(60) }}</div-->
-      {% if ((meta.is_user_blogger) or (post.public)) %}
-      <div class="post">
-        <h1 class="post-title">
-          <a href="{{ post.url }}">{{ post.title }}</a>
-        </h1>
-        <div class="post-meta"></div>
-        <p>
-          {{post.post_date.strftime('%Y.%m.%d')}} by
-          <a href="{{ url_for('blogging.posts_by_author', user_id=post.user_id)}}">
-            <em>{{post.user_name}}</em>
-          </a>
-          {% if post.editable %}
-          &nbsp;
-          <a href="{{ url_for('blogging.editor', post_id=post.post_id) }}" id="edit">
-              <span class="fa fa-edit">编辑</span>
-          </a>
+    <div class="post">
+      <div class="post-archive">
+      {% for year in years %}
+        <h2>{{ year.year }}</h2>
+        <ul class="listing">
+        {% for post in year.posts %}
+          {% if ((meta.is_user_blogger) or (post.public)) %}
+          <li>
+            <span class="date">{{post.post_date.strftime('%Y.%m.%d')}}</span>
+            <a href="{{post.url}}"
+               title="{{post.title}}">{{post.title}}</a>
+          </li>
           {% endif %}
-        </p>
-        <div class="post-content">
-            <div id="post-digest-{{loop.index}}">
-              <textarea style="display:none">{{ post.text|truncate(80) }}</textarea>
-          </div>
-        </div>
-        <p class="readmore">
-          <a href="{{ post.url }}">阅读全文</a>
-        </p>
-        </br>
-        <hr>
+        {% endfor %}
+        </ul>
+      {% endfor %}
       </div>
-      {% endif %}
-    {% endfor %}
+    </div>
     <nav class="page-navigator">
     {% if (meta) and (meta.max_pages>=1) %}
       {% if (meta.pagination.prev_page!=None) %}

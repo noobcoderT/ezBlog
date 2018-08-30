@@ -22,8 +22,7 @@ app.config["FILEUPLOAD_PREFIX"] = "/fileupd"
 app.config["FILEUPLOAD_ALLOWED_EXTENSIONS"] = ["png", "jpg", "jpeg", "gif"]
 app.config["BLOGGING_ALLOW_FILEUPLOAD"] = True
 app.config["BLOGGING_LINKS"] = [{"name":"Github","link":"https://github.com/noobcoderT"},
-        {"name":"Email","link":"mailto:tangzjxb@gmail.com"}
-        ]
+        {"name":"Email","link":"mailto:tangzjxb@gmail.com"}]
 
 db = SQLAlchemy(app)
 

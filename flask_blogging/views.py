@@ -165,7 +165,7 @@ def archives(count, page):
     blogging_engine = _get_blogging_engine(current_app)
     storage = blogging_engine.storage
     config = blogging_engine.config
-    count = count or config.get("BLOGGING_POSTS_PER_PAGE", 10)
+    count = count or config.get("BLOGGING_ARCHIVES_PER_PAGE", 20)
 
     meta = _get_meta(storage, count, page)
     offset = meta["offset"]

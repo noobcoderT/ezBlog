@@ -73,13 +73,12 @@
     <nav class="page-navigator">
     {% if (meta) and (meta.max_pages>=1) %}
       {% if (meta.pagination.prev_page!=None) %}
-        <a class="extend prev" rel="prev" href="/blog/{{ meta.offset|int }}/{{ (meta.page-1)|int
-            }}">上一页</a>
+        <a class="extend prev" rel="prev" href="{{meta.pagination.prev_page}}">上一页</a>
       {% endif %}
       {% if (meta.page==1) %}
         <span class="page-number current">1</span>
       {% else %}
-        <a class="page-number" href="/blog/{{ meta.offset|int }}/1">1</a>
+        <a class="page-number" href="/blog/{{ meta.count|int }}/1">1</a>
       {% endif %}
       {% if (meta.page-3 > 1)%}
       <span class="space">&hellip;</span>
@@ -89,7 +88,7 @@
           {% if (n==meta.page) %}
           <span class="page-number current">{{ n|int }}</span>
           {% else %}
-          <a class="page-number" href="/blog/{{ meta.offset|int }}/{{ n|int }}">{{ n|int }}</a>
+          <a class="page-number" href="/blog/{{ meta.count|int }}/{{ n|int }}">{{ n|int }}</a>
           {% endif %}
         {% endif %}
       {% endfor %}
@@ -100,13 +99,12 @@
         {% if (meta.page==meta.max_pages) %}
         <span class="page-number current">{{ meta.max_pages|int }}</span>
         {% else %}
-        <a class="page-number" href="/blog/{{ meta.offset|int }}/{{ meta.max_pages|int }}">{{
+        <a class="page-number" href="/blog/{{ meta.count|int }}/{{ meta.max_pages|int }}">{{
             meta.max_pages|int }}</a>
         {% endif %}
       {% endif %}
       {% if (meta.pagination.next_page!=None) %}
-        <a class="extend next" rel="next" href="/blog/{{ meta.offset|int }}/{{ (meta.page+1)|int
-            }}">下一页</a>
+        <a class="extend next" rel="next" href="{{ meta.pagination.next_page }}">下一页</a>
       {% endif %}
     </nav>
     {% endif %}

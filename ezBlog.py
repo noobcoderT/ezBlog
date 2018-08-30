@@ -23,6 +23,8 @@ app.config["FILEUPLOAD_ALLOWED_EXTENSIONS"] = ["png", "jpg", "jpeg", "gif"]
 app.config["BLOGGING_ALLOW_FILEUPLOAD"] = True
 app.config["BLOGGING_LINKS"] = [{"name":"Github","link":"https://github.com/noobcoderT"},
         {"name":"Email","link":"mailto:tangzjxb@gmail.com"}]
+app.config["BLOGGING_POSTS_PER_PAGE"] = 8
+app.config["BLOGGING_ARCHIVES_PER_PAGE"] = 20
 
 db = SQLAlchemy(app)
 

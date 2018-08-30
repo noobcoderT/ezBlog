@@ -18,8 +18,8 @@
     <a href="{{ url_for('blogging.editor') }}"><i class="fa fa-plus-circle">写博客</i></a>
     {% endif %}
     <a href="/"><i class="fa fa-home">首页</i></a>
-    <a class="current" href="/blog/archives/"><i class="fa fa-archive">归档</i></a>
-    <a href="/blog/about/"><i class="fa fa-user">关于</i></a>
+    <a class="current" href="{{config.BLOGGING_URL_PREFIX}}archives/"><i class="fa fa-archive">归档</i></a>
+    <a href="{{config.BLOGGING_URL_PREFIX}}about/"><i class="fa fa-user">关于</i></a>
     <a href="{{url_for('blogging.sitemap')}}"><i class="fa fa-rss">订阅</i></a>
   </div>
 {% endblock navmenu %}
@@ -53,7 +53,7 @@
       {% if (meta.page==1) %}
         <span class="page-number current">1</span>
       {% else %}
-        <a class="page-number" href="/blog/{{ meta.count|int }}/1">1</a>
+        <a class="page-number" href="{{config.BLOGGING_URL_PREFIX}}{{ meta.count|int }}/1">1</a>
       {% endif %}
       {% if (meta.page-3 > 1)%}
       <span class="space">&hellip;</span>
@@ -63,7 +63,7 @@
           {% if (n==meta.page) %}
           <span class="page-number current">{{ n|int }}</span>
           {% else %}
-          <a class="page-number" href="/blog/{{ meta.count|int }}/{{ n|int }}">{{ n|int }}</a>
+          <a class="page-number" href="{{config.BLOGGING_URL_PREFIX}}{{ meta.count|int }}/{{ n|int }}">{{ n|int }}</a>
           {% endif %}
         {% endif %}
       {% endfor %}
@@ -74,7 +74,7 @@
         {% if (meta.page==meta.max_pages) %}
         <span class="page-number current">{{ meta.max_pages|int }}</span>
         {% else %}
-        <a class="page-number" href="/blog/{{ meta.count|int }}/{{ meta.max_pages|int }}">{{
+        <a class="page-number" href="{{config.BLOGGING_URL_PREFIX}}{{ meta.count|int }}/{{ meta.max_pages|int }}">{{
             meta.max_pages|int }}</a>
         {% endif %}
       {% endif %}

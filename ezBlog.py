@@ -9,8 +9,10 @@ from flask_blogging import SQLAStorage, BloggingEngine
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, PasswordField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired
+import datetime
 
 app = Flask(__name__)
+app.permanent_session_lifetime = datetime.timedelta(hours=1)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data/ezBlog.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SECRET_KEY"] = "ezBlog"  # for WTF-forms and login

@@ -16,10 +16,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SECRET_KEY"] = "ezBlog"  # for WTF-forms and login
 app.config["BLOGGING_URL_PREFIX"] = "/blog/"  #注意组后的/号不能少
 app.config["BLOGGING_SITEURL"] = "http://127.0.0.1:8000"
+app.config["BLOGGING_AUTHOR"] = "Ziv"
 app.config["BLOGGING_SITENAME"] = "ezBlog"
-app.config["FILEUPLOAD_IMG_FOLDER"] = "data/img"
+app.config["FILEUPLOAD_IMG_FOLDER"] = "data/img"  #img will not upload here, i do not know why
 app.config["FILEUPLOAD_PREFIX"] = "/fileupd"
-app.config["FILEUPLOAD_ALLOWED_EXTENSIONS"] = ["png", "jpg", "jpeg", "gif"]
+app.config["FILEUPLOAD_ALLOWED_EXTENSIONS"] = ["png", "jpg", "jpeg", "gif", "bmp", "webp"]
 app.config["BLOGGING_ALLOW_FILEUPLOAD"] = True
 app.config["BLOGGING_LINKS"] = [{"name":"Github","link":"https://github.com/noobcoderT"},
         {"name":"Email","link":"mailto:tangzjxb@gmail.com"}]

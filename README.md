@@ -25,7 +25,8 @@ An easy Blog written by python, flask, flask-blogging and using maupassant theme
   ```
 
 5. login and write blog  
-  Open {{app.config["BLOGGING_SITEURL"]}}/login/ and input your username and password
-  ({{app.config["BLOGGING_SITEURL"]}} is set in ezBlog.py)
+  Open app.config["BLOGGING_SITEURL"]/login/ (for example, http://example.com/login/) and input your username and password
+  (app.config["BLOGGING_SITEURL"] is set in ezBlog.py)  
+  if you want logout, use app.config["BLOGGING_SITEURL"]/logout/ url.
 
 6. Enjoy it!

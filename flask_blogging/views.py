@@ -193,6 +193,14 @@ def archives(count, page):
     if len(years) == 0:
         years = [{"year":"", "posts":[]}]
     tags = storage.get_tags()
+
+    if meta["pagination"]["prev_page"] is not None:
+        string = meta["pagination"]["prev_page"].replace("blog","blog/archives")
+        meta["pagination"]["prev_page"] = string
+    if meta["pagination"]["next_page"] is not None:
+        string = meta["pagination"]["next_page"].replace("blog","blog/archives")
+        meta["pagination"]["next_page"] = string
+
     return render_template("blogging/archives.html", posts=posts, meta=meta,
                            config=config, tags=tags, years=years)
 
@@ -471,6 +479,9 @@ def create_blueprint(import_name, blogging_engine):
     archives_func = cached_func(blogging_engine, archives)
     blog_app.add_url_rule("/archives/", defaults={"count": None, "page": 1},
                           view_func=archives_func)
+    blog_app.add_url_rule("/archives/<int:count>/", defaults={"page": 1},
+                          view_func=archives_func)
+    blog_app.add_url_rule("/archives/<int:count>/<int:page>/", view_func=archives_func)
 
     # register page_by_id
     page_by_id_func = cached_func(blogging_engine, page_by_id)

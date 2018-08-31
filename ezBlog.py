@@ -16,7 +16,7 @@ app.permanent_session_lifetime = datetime.timedelta(hours=1)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data/ezBlog.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SECRET_KEY"] = "ezBlog"  # for WTF-forms and login
-app.config["BLOGGING_URL_PREFIX"] = "/blog/"  #注意组后的/号不能少
+app.config["BLOGGING_URL_PREFIX"] = "/blog"
 app.config["BLOGGING_SITEURL"] = "http://127.0.0.1:8000"
 app.config["BLOGGING_AUTHOR"] = "Ziv"
 app.config["BLOGGING_SITENAME"] = "ezBlog"
@@ -26,8 +26,8 @@ app.config["FILEUPLOAD_ALLOWED_EXTENSIONS"] = ["png", "jpg", "jpeg", "gif", "bmp
 app.config["BLOGGING_ALLOW_FILEUPLOAD"] = True
 app.config["BLOGGING_LINKS"] = [{"name":"Github","link":"https://github.com/noobcoderT"},
         {"name":"Email","link":"mailto:tangzjxb@gmail.com"}]
-app.config["BLOGGING_POSTS_PER_PAGE"] = 8
-app.config["BLOGGING_ARCHIVES_PER_PAGE"] = 20
+app.config["BLOGGING_POSTS_PER_PAGE"] = 1
+app.config["BLOGGING_ARCHIVES_PER_PAGE"] = 1
 
 db = SQLAlchemy(app)
 

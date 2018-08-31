@@ -9,8 +9,8 @@
     <a href="{{ url_for('blogging.editor') }}"><i class="fa fa-plus-circle">写博客</i></a>
     {% endif %}
     <a href="/"><i class="fa fa-home">首页</i></a>
-    <a href="{{config.BLOGGING_URL_PREFIX}}archives/"><i class="fa fa-archive">归档</i></a>
-    <a class="current" href="{{config.BLOGGING_URL_PREFIX}}about/"><i class="fa fa-user">关于</i></a>
+    <a href="{{url_for('blogging.archives')}}"><i class="fa fa-archive">归档</i></a>
+    <a class="current" href="{{url_for('blogging.about')}}"><i class="fa fa-user">关于</i></a>
     <a href="{{url_for('blogging.sitemap')}}"><i class="fa fa-rss">订阅</i></a>
   </div>
 {% endblock navmenu %}

@@ -332,7 +332,7 @@ def editor(post_id):
                     post = storage.get_post_by_id(post_id)
                     if (post is not None) and \
                             (PostProcessor.is_author(post, current_user)):
-                        tags = ", ".join(post["tags"])
+                        tags = " ".join(post["tags"])
                         form = BlogEditor(title=post["title"],
                                           text=post["text"], tags=tags)
                         editor_get_fetched.send(blogging_engine.app,

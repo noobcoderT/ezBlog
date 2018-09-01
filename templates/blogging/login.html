@@ -11,7 +11,7 @@
 {% block navmenu %}
    <div id="nav-menu">
      <a class="current" href="/login/"><i class="fa fa-sign-in">登录</i></a>
-     <a href="/"><i class="fa fa-home">首页</i></a>
+     <a href="{{url_for('blogging.index')}}"><i class="fa fa-home">首页</i></a>
      <a href="{{url_for('blogging.archives')}}"><i class="fa fa-archive">归档</i></a>
      <a href="{{url_for('blogging.about')}}"><i class="fa fa-user">关于</i></a>
      <a href="{{url_for('blogging.feed')}}"><i class="fa fa-rss">订阅</i></a>

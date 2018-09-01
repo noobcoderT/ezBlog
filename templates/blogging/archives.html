@@ -14,13 +14,14 @@
 
 {% block navmenu %}
   <div id="nav-menu">
-    {% if meta.is_user_blogger %}
     <a href="{{ url_for('blogging.editor') }}"><i class="fa fa-plus-circle">写博客</i></a>
-    {% endif %}
-    <a href="/"><i class="fa fa-home">首页</i></a>
+    <a href="{{url_for('blogging.index')}}"><i class="fa fa-home">首页</i></a>
     <a class="current" href="{{url_for('blogging.archives')}}"><i class="fa fa-archive">归档</i></a>
     <a href="{{url_for('blogging.about')}}"><i class="fa fa-user">关于</i></a>
     <a href="{{url_for('blogging.feed')}}"><i class="fa fa-rss">订阅</i></a>
+    {% if current_user.is_authenticated %}
+    <a href="/logout/"><i class="fa fa-sign-out">退出</i></a>
+    {% endif %}
   </div>
 {% endblock navmenu %}
 
@@ -28,6 +29,7 @@
 <div class="pure-u-1 pure-u-md-3-4">
   <div class="content_container">
     <div class="post">
+      <p style="text-align:center">当前总共写了{{meta.max_posts}}篇博客，标签{{tags|length}}个，继续加油哦！</p>
       <div class="post-archive">
       {% for year in years %}
         <h2>{{ year.year }}</h2>
@@ -55,10 +57,10 @@
       {% else %}
         <a class="page-number" href="{{url_for('blogging.archives',count=meta.count,page=1)}}">1</a>
       {% endif %}
-      {% if (meta.page-3 > 1)%}
+      {% if (meta.page-2 > 1)%}
       <span class="space">&hellip;</span>
       {% endif %}
-      {% for n in (meta.page-2, meta.page-1, meta.page, meta.page+1, meta.page+2) %}
+      {% for n in (meta.page-1, meta.page, meta.page+1) %}
         {% if ((n>1) and (n<meta.max_pages)) %}
           {% if (n==meta.page) %}
           <span class="page-number current">{{ n|int }}</span>
@@ -67,7 +69,7 @@
           {% endif %}
         {% endif %}
       {% endfor %}
-      {% if (meta.page+3 < meta.max_pages) %}
+      {% if (meta.page+2 < meta.max_pages) %}
       <span class="space">&hellip;</span>
       {% endif %}
       {% if (meta.max_pages>1) %}

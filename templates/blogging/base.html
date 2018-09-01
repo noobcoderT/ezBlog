@@ -41,7 +41,7 @@
       {% for category, message in messages %}
       <div class="pure-u-1">
         <div class="content_container">
-          <div class="alert alert-{{ category }} alert-dismissable" style="margin-left:30%;margin-right:30%">
+          <div class="alert alert-{{ category }} alert-dismissable" style="text-align:center;margin-left:30%;margin-right:30%">
             {{ message }}
           </div>
         </div>
@@ -50,24 +50,10 @@
     {% endif %}
     {% endwith %}
     {% endblock message %}
-      <!--div class="content_container"-->
         {% block post %}
         {% endblock post%}
-      <!--/div-->
-      <!--/div-->
-
-      <!--div class="pure-u-1-4 hidden_mid_and_down">
-        <div id="sidebar"-->
-          <!--div class="widget">
-            <form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank">
-              <input type="text" name="q" maxlength="20" placeholder="Search">
-              <input type="hidden" name="sitesearch" value="{{ config.BLOGGING_SITEURL}}">
-            </form>
-          </div-->
-          {% block sidebar %}
-          {% endblock sidebar %}
-        <!--/div>
-      </div-->
+        {% block sidebar %}
+        {% endblock sidebar %}
       <div class="pure-u-1">
         <div id="footer">
             Copyright © 2018 <a href="/" rel="nofollow" style="color:gray">{{config.BLOGGING_AUTHOR}}</a> |
@@ -76,13 +62,9 @@
         </div>
       </div>
     </div>
-    <!--a class="show" id="rocket" href="#top"></a-->
     <a id="rocket" href="javascript:scrollTo(0,0);"></a>
     {% block js %}
     <script src="/static/js/totop.js" async></script>
-    <!--script src="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.js" async></script>
-    <script src="/static/js/fancybox.js" async></script>
-    <link rel="stylesheet" href="//cdn.bootcss.com/fancybox/3.3.5/jquery.fancybox.min.css"-->
     <script src="/static/js/codeblock-resizer.js"></script>
     <script src="/static/js/smartresize.js"></script>
     {% endblock js %}

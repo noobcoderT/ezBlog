@@ -15,13 +15,14 @@
 
 {% block navmenu %}
   <div id="nav-menu">
-    {% if meta.is_user_blogger %}
-    <a href="{{ url_for('blogging.editor') }}"><i class="fa fa-plus-circle">写博客</i></a>
-    {% endif %}
-    <a href="/"><i class="fa fa-home">首页</i></a>
+    <a href="{{url_for('blogging.editor')}}"><i class="fa fa-plus-circle">写博客</i></a>
+    <a href="{{url_for('blogging.index')}}"><i class="fa fa-home">首页</i></a>
     <a href="{{url_for('blogging.archives')}}"><i class="fa fa-archive">归档</i></a>
     <a href="{{url_for('blogging.about')}}"><i class="fa fa-user">关于</i></a>
     <a href="{{url_for('blogging.feed')}}"><i class="fa fa-rss">订阅</i></a>
+    {% if meta.is_user_blogger %}
+    <a href="/logout/"><i class="fa fa-sign-out">退出</i></a>
+    {% endif %}
   </div>
 {% endblock navmenu %}
 

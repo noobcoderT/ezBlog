@@ -45,7 +45,7 @@ def _store_form_data(blog_form, storage, user, post, escape_text=True):
     title = blog_form.title.data
     text = escape(blog_form.text.data) if escape_text \
         else blog_form.text.data
-    tags = blog_form.tags.data.split(",")
+    tags = blog_form.tags.data.split()
     draft = blog_form.draft.data
     user_id = user.get_id()
     public = blog_form.public.data

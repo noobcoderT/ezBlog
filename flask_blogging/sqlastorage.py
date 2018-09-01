@@ -299,6 +299,7 @@ class SQLAStorage(Storage):
             except Exception as e:
                 self._logger.exception(str(e))
         tags = [result[i[0]-1][0] for i in tag_id]
+        tags = set(tags)
         return tags
 
     def count_posts(self, tag=None, user_id=None, include_draft=False):

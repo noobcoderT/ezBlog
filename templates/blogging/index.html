@@ -35,7 +35,6 @@
     {% endif %}
 
     {% for post in posts %}
-      <!--div>{{ post.text|truncate(60) }}</div-->
       {% if ((meta.is_user_blogger) or (post.public)) %}
       <div class="post">
         <h1 class="post-title">
@@ -61,7 +60,7 @@
         </p>
         <div class="post-content">
             <div id="post-digest-{{loop.index}}">
-              <textarea style="display:none">{{ post.text|truncate(80) }}</textarea>
+              <textarea style="display:none">{{ post.text|truncate(200) }}</textarea>
           </div>
         </div>
         <p class="readmore">

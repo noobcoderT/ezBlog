@@ -425,12 +425,13 @@ def feed():
     if len(posts):
         for post in posts:
             blogging_engine.process_post(post, render=True)
-            feed.add(post["title"], ensureUtf(post["rendered_text"]),
-                     content_type='html',
-                     author=post["user_name"],
-                     url=config.get("BLOGGING_SITEURL", "")+post["url"],
-                     updated=post["last_modified_date"],
-                     published=post["post_date"])
+            if post["public"] is not 0:
+                feed.add(post["title"], ensureUtf(post["rendered_text"]),
+                         content_type='html',
+                         author=post["user_name"],
+                         url=config.get("BLOGGING_SITEURL", "")+post["url"],
+                         updated=post["last_modified_date"],
+                         published=post["post_date"])
         feed_posts_processed.send(blogging_engine.app, engine=blogging_engine,
                                   feed=feed)
     response = feed.get_response()

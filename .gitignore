@@ -1,8 +1,8 @@
 *.pyc
 *.db
-*.png
-*.jpg
-*.jpeg
-*.git
-*.bmp
-*.webp
+static/upload/*.png
+static/upload/*.jpg
+static/upload/*.jpeg
+static/upload/*.git
+static/upload/*.bmp
+static/upload/*.webp

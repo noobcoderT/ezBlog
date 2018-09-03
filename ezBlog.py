@@ -80,19 +80,24 @@ def index():
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
+    global nxt
+    if request.method == 'GET':
+        nxt = request.args.get("next", None)
     if current_user.is_authenticated:
-        return redirect('/blog/')
+        if nxt:
+            return redirect(nxt)
+        else:
+            return redirect('/blog/')
     form = LoginForm()
     if form.validate_on_submit():
         input_username = request.form.get('username', None)
         input_password = request.form.get('password', None)
         remember_me = request.form.get('remember_me', False)
         user = User.query.filter_by(username=input_username, password=input_password).first()
-        next = request.args.get('next')
         if user is not None:
             login_user(user, remember=remember_me)
-            if next:
-                return redirect(next)
+            if nxt:
+                return redirect(nxt)
             else:
                 return redirect('/blog/')
         else:

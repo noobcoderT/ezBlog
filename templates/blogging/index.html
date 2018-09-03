@@ -63,6 +63,13 @@
               <textarea style="display:none">{{ post.text|truncate(200) }}</textarea>
           </div>
         </div>
+        {% if post.tags %}
+        <div class="tags">
+          {% for tag in post.tags %}
+            <a href="{{ url_for('blogging.posts_by_tag', tag=tag.lower(), count=10, offset=0) }}">{{ tag }}</a>
+          {% endfor %}
+        </div>
+        {% endif %}
         <p class="readmore">
           <a href="{{ post.url }}">阅读全文</a>
         </p>

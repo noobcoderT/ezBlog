@@ -334,7 +334,7 @@ def editor(post_id):
                             (PostProcessor.is_author(post, current_user)):
                         tags = " ".join(post["tags"])
                         form = BlogEditor(title=post["title"],
-                                          text=post["text"], tags=tags)
+                                          text=post["text"], tags=tags, public=post['public'])
                         editor_get_fetched.send(blogging_engine.app,
                                                 engine=blogging_engine,
                                                 post_id=post_id,

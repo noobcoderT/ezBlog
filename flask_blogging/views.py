@@ -227,7 +227,6 @@ def page_by_id(post_id, slug):
         page_by_id_processed.send(blogging_engine.app, engine=blogging_engine,
                                   post=post, meta=meta)
         tags = storage.get_tags(auth=meta["is_user_blogger"])
-
         prev_post_id = int(post_id) - 1
         next_post_id = int(post_id) + 1
         prev_post = None
@@ -399,6 +398,28 @@ def delete(post_id):
                                       engine=blogging_engine,
                                       post_id=post_id,
                                       post=post)
+
+                    blogging_engine.process_post(post,render=True)
+                    tags = post["tags"]
+                    for tag in tags:
+                        tag_posts = storage.get_posts(count=None, offset=None, tag=tag,
+                              include_draft=False, user_id=None, recent=True)
+                        if len(tag_posts) is 0:
+                            storage.delete_tag(tag)
+                    img_in_use = False
+                    for img in post["meta"]["images"]:
+                        all_posts = storage.get_posts(count=None, offset=None, tag=None,
+                                include_draft=False, user_id=None, recent=True)
+                        for p in all_posts:
+                            blogging_engine.process_post(p, render=True)
+                            if img in p["meta"]["images"]:
+                                img_in_use = True
+                                break
+                        if img_in_use:
+                            break
+                        else:
+                            import os
+                            os.remove("."+img)
                 else:
                     flash("There were errors while deleting your post",
                           "warning")

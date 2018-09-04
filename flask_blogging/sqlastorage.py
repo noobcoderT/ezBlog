@@ -300,7 +300,8 @@ class SQLAStorage(Storage):
                     tag_text = conn.execute(select_statement).fetchall()[0][0]
                     tag_valid = False
                     if auth is False:
-                        tag_posts = self.get_posts(tag=tag_text)
+                        tag_posts = self.get_posts(count=None, offset=None,
+                                recent=True, tag=tag_text)
                         for post in tag_posts:
                             if post["public"] is not 0:
                                 tag_valid = True
@@ -376,6 +377,28 @@ class SQLAStorage(Storage):
             except Exception as e:
                 self._logger.exception(str(e))
         status = success == 3
+        return status
+
+    def delete_tag(self, tag_text):
+        """
+        Delete the tag defined by ``tag_text``
+
+        :param tag_text: The tag text
+        :type tag_text: str
+        :return: Returns True if the tag was successfully deleted and False
+         otherwise.
+        """
+        status = False
+        success = 0
+        with self._engine.begin() as conn:
+            try:
+                tag_del_statement = self._tag_table.delete().where(
+                    self._tag_table.c.text == tag_text)
+                conn.execute(tag_del_statement)
+                success += 1
+            except Exception as e:
+                self._logger.exception(str(e))
+        status = success == 1
         return status
 
     def _get_filter(self, tag, user_id, include_draft, conn):

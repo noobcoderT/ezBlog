@@ -130,7 +130,7 @@ def index(count, page):
         blogging_engine.process_post(post, render=render)
     index_posts_processed.send(blogging_engine.app, engine=blogging_engine,
                                posts=posts, meta=meta)
-    tags = storage.get_tags()
+    tags = storage.get_tags(auth=meta["is_user_blogger"])
     return render_template("blogging/index.html", posts=posts, meta=meta,
                            config=config, tags=tags)
 
@@ -155,7 +155,7 @@ def about(count, page):
         blogging_engine.process_post(post, render=render)
     index_posts_processed.send(blogging_engine.app, engine=blogging_engine,
                                posts=posts, meta=meta)
-    tags = storage.get_tags()
+    tags = storage.get_tags(auth=meta["is_user_blogger"])
     return render_template("blogging/about.html", posts=posts, meta=meta,
                            config=config, tags=tags)
 
@@ -182,17 +182,21 @@ def archives(count, page):
         blogging_engine.process_post(post, render=render)
     index_posts_processed.send(blogging_engine.app, engine=blogging_engine,
                                posts=posts, meta=meta)
+    max_posts = meta["max_posts"]
     for post in posts:
+        if meta["is_user_blogger"] is False and post["public"] is 0:
+            max_posts -= 1
         year = post["post_date"].strftime("%Y")
         if year not in year_dict:
             year_dict[year] = []
         year_dict[year].append(post)
+    meta["max_posts"] = max_posts
     for year in year_dict.keys():
         tmp_dict = {"year":year, "posts":year_dict[year]}
         years.append(tmp_dict)
     if len(years) == 0:
         years = [{"year":"", "posts":[]}]
-    tags = storage.get_tags()
+    tags = storage.get_tags(auth=meta["is_user_blogger"])
 
     if meta["pagination"]["prev_page"] is not None:
         string = meta["pagination"]["prev_page"].replace("blog","blog/archives")
@@ -222,7 +226,7 @@ def page_by_id(post_id, slug):
         blogging_engine.process_post(post, render=render)
         page_by_id_processed.send(blogging_engine.app, engine=blogging_engine,
                                   post=post, meta=meta)
-        tags = storage.get_tags()
+        tags = storage.get_tags(auth=meta["is_user_blogger"])
 
         prev_post_id = int(post_id) - 1
         next_post_id = int(post_id) + 1
@@ -271,7 +275,7 @@ def posts_by_tag(tag, count, page):
         posts_by_tag_processed.send(blogging_engine.app,
                                     engine=blogging_engine,
                                     posts=posts, meta=meta)
-        tags = storage.get_tags()
+        tags = storage.get_tags(auth=meta["is_user_blogger"])
         return render_template("blogging/index.html", posts=posts, meta=meta,
                                config=config, tags=tags)
     else:
@@ -302,7 +306,7 @@ def posts_by_author(user_id, count, page):
         posts_by_author_processed.send(blogging_engine.app,
                                        engine=blogging_engine, posts=posts,
                                        meta=meta)
-        tags = storage.get_tags()
+        tags = storage.get_tags(auth=meta["is_user_blogger"])
         return render_template("blogging/index.html", posts=posts, meta=meta,
                                config=config, tags=tags)
     else:

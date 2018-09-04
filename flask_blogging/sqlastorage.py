@@ -288,7 +288,7 @@ class SQLAStorage(Storage):
         posts = [self.get_post_by_id(pid[0]) for pid in result]
         return posts
 
-    def get_tags(self):
+    def get_tags(self, auth=False):
         with self._engine.begin() as conn:
             result = []
             try:
@@ -298,7 +298,17 @@ class SQLAStorage(Storage):
                     select_statement = sqla.select([self._tag_table.c.text]). \
                             where(self._tag_table.c.id==tid[0])
                     tag_text = conn.execute(select_statement).fetchall()[0][0]
-                    result.append(tag_text)
+                    tag_valid = False
+                    if auth is False:
+                        tag_posts = self.get_posts(tag=tag_text)
+                        for post in tag_posts:
+                            if post["public"] is not 0:
+                                tag_valid = True
+                                break
+                    else:
+                        tag_valid = True
+                    if tag_valid:
+                        result.append(tag_text)
             except Exception as e:
                 self._logger.exception(str(e))
 

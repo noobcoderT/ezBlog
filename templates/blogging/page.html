@@ -68,6 +68,14 @@
       {% endif %}
     </div>
   <hr>
+  <nav class="page-navigator">
+    {% if prev_post %}
+    <a class="extend prev" rel="prev" href="{{prev_post.url}}">上一篇：{{prev_post.title}}</a>
+    {% endif %}
+    {% if next_post %}
+    <a class="extend next" rel="next" href="{{next_post.url}}">下一篇：{{next_post.title}}</a>
+    {% endif %}
+  </nav>
   </div>
 </div>
 {% endblock post %}

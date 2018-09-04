@@ -209,6 +209,7 @@ def page_by_id(post_id, slug):
     storage = blogging_engine.storage
     config = blogging_engine.config
     post = storage.get_post_by_id(post_id)
+    max_posts = storage.count_posts()
     meta = {}
     meta["is_user_blogger"] = _is_blogger(blogging_engine.blogger_permission)
 
@@ -222,8 +223,27 @@ def page_by_id(post_id, slug):
         page_by_id_processed.send(blogging_engine.app, engine=blogging_engine,
                                   post=post, meta=meta)
         tags = storage.get_tags()
+
+        prev_post_id = int(post_id) - 1
+        next_post_id = int(post_id) + 1
+        prev_post = None
+        next_post = None
+        while prev_post_id >= 1:
+            prev_post = storage.get_post_by_id(prev_post_id)
+            if prev_post is not None:
+                blogging_engine.process_post(prev_post, render=render)
+                if meta["is_user_blogger"] or prev_post["public"]:
+                    break
+            prev_post_id -= 1
+        while next_post_id <= max_posts:
+            next_post = storage.get_post_by_id(next_post_id)
+            if next_post is not None:
+                blogging_engine.process_post(next_post, render=render)
+                if meta["is_user_blogger"] or next_post["public"]:
+                    break
+            next_post_id += 1
         return render_template("blogging/page.html", post=post, config=config,
-                               meta=meta, tags=tags)
+                               meta=meta, tags=tags, prev_post=prev_post,next_post=next_post)
     else:
         flash("The page you are trying to access is not valid!", "warning")
         return redirect(url_for("blogging.index"))

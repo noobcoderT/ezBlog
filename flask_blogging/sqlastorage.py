@@ -294,12 +294,15 @@ class SQLAStorage(Storage):
             try:
                 select_statement = sqla.select([self._tag_posts_table.c.tag_id])
                 tag_id = conn.execute(select_statement).fetchall()
-                select_statement = sqla.select([self._tag_table.c.text])
-                result = conn.execute(select_statement).fetchall()
+                for tid in tag_id:
+                    select_statement = sqla.select([self._tag_table.c.text]). \
+                            where(self._tag_table.c.id==tid[0])
+                    tag_text = conn.execute(select_statement).fetchall()[0][0]
+                    result.append(tag_text)
             except Exception as e:
                 self._logger.exception(str(e))
-        tags = [result[i[0]-1][0] for i in tag_id]
-        tags = set(tags)
+
+        tags = set(result)
         return tags
 
     def count_posts(self, tag=None, user_id=None, include_draft=False):

@@ -41,7 +41,7 @@ def _clear_cache(cache):
     cache.delete_memoized(feed)
 
 
-def _store_form_data(blog_form, storage, user, post, escape_text=True):
+def _store_form_data(blog_form, storage, user, post, escape_text=False):
     title = blog_form.title.data
     text = escape(blog_form.text.data) if escape_text \
         else blog_form.text.data
@@ -311,7 +311,7 @@ def editor(post_id):
                         pass
                     else:
                         post = {}
-                    escape_text = config.get("BLOGGING_ESCAPE_MARKDOWN", True)
+                    escape_text = config.get("BLOGGING_ESCAPE_MARKDOWN", False)
                     pid = _store_form_data(form, storage, current_user, post,
                                            escape_text)
                     editor_post_saved.send(blogging_engine.app,

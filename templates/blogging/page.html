@@ -10,7 +10,7 @@
 
 {% block extrastyle %}
   <link rel="stylesheet" href="/static/libs/editor.md/css/style.css" />
-  <link rel="stylesheet" href="/static/libs/editor.md/css/editormd.css" />
+  <link rel="stylesheet" href="/static/libs/editor.md/css/editormd.preview.css" />
 {% endblock extrastyle %}
 
 {% block navmenu %}
@@ -52,7 +52,7 @@
           {% endif %}
         </p>
       <div class="post-content">
-        <div id="editor-view">
+        <div id="editor-view" class="markdown-body editormd-html-preview">
           <textarea style="display:none">{{ post.text }}</textarea>
         </div>
       </div>
@@ -117,17 +117,31 @@
 {% endblock sidebar %}
 
 {% block extrajs %}
-<script src="/static/js/marked.min.js"></script>
-<script src="/static/js/prettify.min.js"></script>
 <script src="/static/libs/editor.md/js/jquery.min.js"></script>
+<script src="/static/libs/editor.md/lib/marked.min.js"></script>
+<script src="/static/libs/editor.md/lib/prettify.min.js"></script>
+<script src="/static/libs/editor.md/lib/raphael.min.js"></script>
+<script src="/static/libs/editor.md/lib/underscore.min.js"></script>
+<script src="/static/libs/editor.md/lib/sequence-diagram.min.js"></script>
+<script src="/static/libs/editor.md/lib/flowchart.min.js"></script>
+<script src="/static/libs/editor.md/lib/jquery.flowchart.min.js"></script>
 <script src="/static/libs/editor.md/js/editormd.min.js"></script>
 <script type="text/javascript">
   var viewEditor;
   $(function(){
-    viewEditor = editormd.markdownToHTML("editor-view", {
-        path       : "/static/libs/editor.md/lib/",
-        tocm       : true,
-        toContainer: "",
+    $(function(){
+      viewEditor = editormd.markdownToHTML("editor-view", {
+          markdown        : "",
+          htmlDecode      : "style,script,iframe|on*",
+          path            : "/static/libs/editor.md/lib/",
+          tocm            : true,
+          toContainer     : "",
+          emoji           : true,
+          taskList        : true,
+          tex             : true,  // 默认不解析
+          flowChart       : true,  // 默认不解析
+          sequenceDiagram : true,  // 默认不解析
+      });
     });
   });
 </script>

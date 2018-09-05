@@ -199,8 +199,9 @@
       $.ajax({
         type: 'POST',
         url: url_to_delete,
-        success: function () {
-          window.location.href='{{config.BLOGGING_SITEURL}}';
+        success: function (data) {
+          $("body").html(data);
+          //window.location.href='{{config.BLOGGING_SITEURL}}';
         },
         error: function (error) {
           console.log("删除错误")

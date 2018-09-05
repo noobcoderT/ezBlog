@@ -17,7 +17,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data/ezBlog.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SECRET_KEY"] = "ezBlog"  # for WTF-forms and login
 app.config["BLOGGING_URL_PREFIX"] = "/blog"
-app.config["BLOGGING_SITEURL"] = "http://127.0.0.1:8000"
+app.config["BLOGGING_SITEURL"] = "http://traceme.space"
 app.config["BLOGGING_AUTHOR"] = "Ziv"
 app.config["BLOGGING_SITENAME"] = "ezBlog"
 app.config["FILEUPLOAD_IMG_FOLDER"] = "data/img"  #img will not upload here, i do not know why
@@ -110,4 +110,4 @@ def logout():
     return redirect("/blog/")
 
 if __name__ == "__main__":
-    app.run(debug=True, host='::', port=8000, use_reloader=True)
+    app.run(debug=True, host='::', port=80, use_reloader=True)

@@ -9,12 +9,16 @@
   <meta name="description" content="Yet an easy Blog">
   <link rel="icon" href="/static/favicon.png" type="image/png" />
   <link rel="stylesheet" href="/static/css/mystyle.css">
+  <link rel="stylesheet" href="/static/css/myalert.css">
   <link rel="stylesheet" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
   <link rel="stylesheet" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css">
   <link rel="stylesheet" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css">
   <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="/static/libs/editor.md/js/jquery.min.js"></script>
   <script src="//cdn.bootcss.com/es6-promise/4.1.1/es6-promise.auto.min.js" async></script>
+  <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
   {% block meta %}
   {% endblock meta %}
   {% block style %}
@@ -42,7 +46,8 @@
       {% for category, message in messages %}
       <div class="pure-u-1">
         <div class="content_container">
-          <div class="alert alert-{{ category }} alert-dismissable" style="text-align:center;margin-left:30%;margin-right:30%">
+          <div class="alert alert-{{ category }} alert-dismissible" style="text-align:center;margin-left:30%;margin-right:30%">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
             {{ message }}
           </div>
         </div>

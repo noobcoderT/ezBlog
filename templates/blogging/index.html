@@ -201,7 +201,7 @@
         url: url_to_delete,
         success: function (data) {
           $("body").html(data);
-          //window.location.href='{{config.BLOGGING_SITEURL}}';
+          window.location.pathname='{{config.BLOGGING_URL_PREFIX}}';
         },
         error: function (error) {
           console.log("删除错误")

@@ -1,5 +1,7 @@
 *.pyc
 *.db
+*.key
+*.crt
 static/upload/*.png
 static/upload/*.jpg
 static/upload/*.jpeg

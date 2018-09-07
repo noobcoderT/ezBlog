@@ -237,6 +237,8 @@ def page_by_id(post_id, slug):
                 blogging_engine.process_post(prev_post, render=render)
                 if meta["is_user_blogger"] or prev_post["public"]:
                     break
+                else:
+                    prev_post = None
             prev_post_id -= 1
         while next_post_id <= max_posts:
             next_post = storage.get_post_by_id(next_post_id)
@@ -244,6 +246,8 @@ def page_by_id(post_id, slug):
                 blogging_engine.process_post(next_post, render=render)
                 if meta["is_user_blogger"] or next_post["public"]:
                     break
+                else:
+                    next_post = None
             next_post_id += 1
         return render_template("blogging/page.html", post=post, config=config,
                                meta=meta, tags=tags, prev_post=prev_post,next_post=next_post)

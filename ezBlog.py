@@ -9,10 +9,12 @@ from flask_blogging import SQLAStorage, BloggingEngine
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, PasswordField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired
+from flask_sslify import SSLify
 import datetime
 
 app = Flask(__name__)
 app.permanent_session_lifetime = datetime.timedelta(hours=3)
+app.config['USE_HTTPS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data/ezBlog.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SECRET_KEY"] = "ezBlog"  # for WTF-forms and login
@@ -28,6 +30,9 @@ app.config["BLOGGING_LINKS"] = [{"name":"Github","link":"https://github.com/noob
         {"name":"Email","link":"mailto:tangzjxb@gmail.com"}]
 app.config["BLOGGING_POSTS_PER_PAGE"] = 8
 app.config["BLOGGING_ARCHIVES_PER_PAGE"] = 20
+
+if app.config['USE_HTTPS']:
+    sslify = SSLify(app)
 
 db = SQLAlchemy(app)
 
@@ -110,4 +115,9 @@ def logout():
     return redirect("/blog/")
 
 if __name__ == "__main__":
-    app.run(debug=True, host='::', port=80, use_reloader=True)
+    if app.config['USE_HTTPS']:
+        app.config["BLOGGING_SITEURL"] = app.config["BLOGGING_SITEURL"].replace('http', 'https')
+        context = ('server.crt', 'server.key')
+        app.run(debug=True, host='::', port=443, use_reloader=True, ssl_context=context)
+    else:
+        app.run(debug=True, host='::', port=80, use_reloader=True)

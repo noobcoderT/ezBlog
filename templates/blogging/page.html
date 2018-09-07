@@ -162,7 +162,7 @@
         type: 'POST',
         url: url_to_delete,
         success: function (data) {
-          $("body").html(data);
+          //$("body").html(data);
           window.location.pathname='{{config.BLOGGING_URL_PREFIX}}';
         },
         error: function (error) {

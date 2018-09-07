@@ -27,19 +27,19 @@
 }
 
 .alert-primary {
-  color: #004085;
-  background-color: #cce5ff;
-  border-color: #b8daff;
+  color: #555;
+  background-color: #dcdcdc;
+  border-color: #dcdcdc;
 }
 
 .alert-message {
   color: #555;
-  background-color: #f5f5f5;
-  border-color: #f5f5f5;
+  background-color: #dcdcdc;
+  border-color: #dcdcdc;
 }
 
 .alert-primary hr {
-  border-top-color: #f5f5f5;
+  border-top-color: #dcdcdc;
 }
 
 .alert-primary .alert-link {
@@ -48,12 +48,12 @@
 
 .alert-secondary {
   color: #555;
-  background-color: #f5f5f5;
-  border-color: #f5f5f5;
+  background-color: #dcdcdc;
+  border-color: #dcdcdc;
 }
 
 .alert-secondary hr {
-  border-top-color: #f5f5f5;
+  border-top-color: #dcdcdc;
 }
 
 .alert-secondary .alert-link {
@@ -62,12 +62,12 @@
 
 .alert-success {
   color: #555;
-  background-color: #f5f5f5;
-  border-color: #f5f5f5;
+  background-color: #dcdcdc;
+  border-color: #dcdcdc;
 }
 
 .alert-success hr {
-  border-top-color: #f5f5f5;
+  border-top-color: #dcdcdc;
 }
 
 .alert-success .alert-link {
@@ -76,12 +76,12 @@
 
 .alert-info {
   color: #555;
-  background-color: #f5f5f5;
-  border-color: #f5f5f5;
+  background-color: #dcdcdc;
+  border-color: #dcdcdc;
 }
 
 .alert-info hr {
-  border-top-color: #f5f5f5;
+  border-top-color: #dcdcdc;
 }
 
 .alert-info .alert-link {
@@ -90,12 +90,12 @@
 
 .alert-warning {
   color: #555;
-  background-color: #f5f5f5;
-  border-color: #f5f5f5;
+  background-color: #dcdcdc;
+  border-color: #dcdcdc;
 }
 
 .alert-warning hr {
-  border-top-color: #f5f5f5;
+  border-top-color: #dcdcdc;
 }
 
 .alert-warning .alert-link {
@@ -104,12 +104,12 @@
 
 .alert-danger {
   color: #555;
-  background-color: #f5f5f5;
-  border-color: #f5f5f5;
+  background-color: #dcdcdc;
+  border-color: #dcdcdc;
 }
 
 .alert-danger hr {
-  border-top-color: #f5f5f5;
+  border-top-color: #dcdcdc;
 }
 
 .alert-danger .alert-link {
@@ -118,12 +118,12 @@
 
 .alert-light {
   color: #555;
-  background-color: #f5f5f5;
-  border-color: #f5f5f5;
+  background-color: #dcdcdc;
+  border-color: #dcdcdc;
 }
 
 .alert-light hr {
-  border-top-color: #f5f5f5;
+  border-top-color: #dcdcdc;
 }
 
 .alert-light .alert-link {
@@ -132,12 +132,12 @@
 
 .alert-dark {
   color: #555;
-  background-color: #f5f5f5;
-  border-color: #f5f5f5;
+  background-color: #dcdcdc;
+  border-color: #dcdcdc;
 }
 
 .alert-dark hr {
-  border-top-color: #f5f5f5;
+  border-top-color: #dcdcdc;
 }
 
 .alert-dark .alert-link {

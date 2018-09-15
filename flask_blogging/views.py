@@ -128,9 +128,22 @@ def index(count, page):
                              posts=posts, meta=meta)
     for post in posts:
         blogging_engine.process_post(post, render=render)
+    for post in posts:
+        try:
+            if post["public"] is 0 and int(post["user_id"]) != current_user.id:
+                post["display"] = False
+            else:
+                post["display"] = True
+        except AttributeError:
+            pass
     index_posts_processed.send(blogging_engine.app, engine=blogging_engine,
                                posts=posts, meta=meta)
-    tags = storage.get_tags(auth=meta["is_user_blogger"])
+    uid = None
+    try:
+        uid = current_user.id
+    except AttributeError:
+        uid = None
+    tags = storage.get_tags(auth=meta["is_user_blogger"], uid=uid)
     return render_template("blogging/index.html", posts=posts, meta=meta,
                            config=config, tags=tags)
 
@@ -155,7 +168,12 @@ def about(count, page):
         blogging_engine.process_post(post, render=render)
     index_posts_processed.send(blogging_engine.app, engine=blogging_engine,
                                posts=posts, meta=meta)
-    tags = storage.get_tags(auth=meta["is_user_blogger"])
+    uid = None
+    try:
+        uid = current_user.id
+    except AttributeError:
+        uid = None
+    tags = storage.get_tags(auth=meta["is_user_blogger"], uid=uid)
     return render_template("blogging/about.html", posts=posts, meta=meta,
                            config=config, tags=tags)
 
@@ -182,21 +200,29 @@ def archives(count, page):
         blogging_engine.process_post(post, render=render)
     index_posts_processed.send(blogging_engine.app, engine=blogging_engine,
                                posts=posts, meta=meta)
+    all_posts = storage.get_posts(count=None, offset=None, include_draft=False,
+                              tag=None, user_id=None, recent=True)
     max_posts = meta["max_posts"]
-    for post in posts:
+    for post in all_posts:
         if meta["is_user_blogger"] is False and post["public"] is 0:
             max_posts -= 1
+    meta["max_posts"] = max_posts
+    uid = None
+    try:
+        uid = current_user.id
+    except AttributeError:
+        uid = None
+    for post in posts:
         year = post["post_date"].strftime("%Y")
         if year not in year_dict:
             year_dict[year] = []
         year_dict[year].append(post)
-    meta["max_posts"] = max_posts
     for year in year_dict.keys():
         tmp_dict = {"year":year, "posts":year_dict[year]}
         years.append(tmp_dict)
     if len(years) == 0:
         years = [{"year":"", "posts":[]}]
-    tags = storage.get_tags(auth=meta["is_user_blogger"])
+    tags = storage.get_tags(auth=meta["is_user_blogger"], uid=uid)
 
     if meta["pagination"]["prev_page"] is not None:
         string = meta["pagination"]["prev_page"].replace("blog","blog/archives")
@@ -222,35 +248,44 @@ def page_by_id(post_id, slug):
     meta["slug"] = slug
     page_by_id_fetched.send(blogging_engine.app, engine=blogging_engine,
                             post=post, meta=meta)
+    uid = None
+    try:
+        uid = current_user.id
+    except AttributeError:
+        uid = None
     if post is not None:
-        blogging_engine.process_post(post, render=render)
-        page_by_id_processed.send(blogging_engine.app, engine=blogging_engine,
-                                  post=post, meta=meta)
-        tags = storage.get_tags(auth=meta["is_user_blogger"])
-        prev_post_id = int(post_id) - 1
-        next_post_id = int(post_id) + 1
-        prev_post = None
-        next_post = None
-        while prev_post_id >= 1:
-            prev_post = storage.get_post_by_id(prev_post_id)
-            if prev_post is not None:
-                blogging_engine.process_post(prev_post, render=render)
-                if meta["is_user_blogger"] or prev_post["public"]:
-                    break
-                else:
-                    prev_post = None
-            prev_post_id -= 1
-        while next_post_id <= max_posts:
-            next_post = storage.get_post_by_id(next_post_id)
-            if next_post is not None:
-                blogging_engine.process_post(next_post, render=render)
-                if meta["is_user_blogger"] or next_post["public"]:
-                    break
-                else:
-                    next_post = None
-            next_post_id += 1
-        return render_template("blogging/page.html", post=post, config=config,
+        if post["public"] is not 0 or int(post["user_id"])==uid:
+            blogging_engine.process_post(post, render=render)
+            page_by_id_processed.send(blogging_engine.app, engine=blogging_engine,
+                                      post=post, meta=meta)
+            tags = storage.get_tags(auth=meta["is_user_blogger"], uid=uid)
+            prev_post_id = int(post_id) - 1
+            next_post_id = int(post_id) + 1
+            prev_post = None
+            next_post = None
+            while prev_post_id >= 1:
+                prev_post = storage.get_post_by_id(prev_post_id)
+                if prev_post is not None:
+                    blogging_engine.process_post(prev_post, render=render)
+                    if uid == int(prev_post["user_id"]) or prev_post["public"]:
+                        break
+                    else:
+                        prev_post = None
+                prev_post_id -= 1
+            while next_post_id <= max_posts:
+                next_post = storage.get_post_by_id(next_post_id)
+                if next_post is not None:
+                    blogging_engine.process_post(next_post, render=render)
+                    if uid == int(next_post["user_id"]) or next_post["public"]:
+                        break
+                    else:
+                        next_post = None
+                next_post_id += 1
+            return render_template("blogging/page.html", post=post, config=config,
                                meta=meta, tags=tags, prev_post=prev_post,next_post=next_post)
+        else:
+            flash("You do not have the rights to view this post!", "warning")
+            return redirect(url_for("blogging.archives"))
     else:
         flash("The page you are trying to access is not valid!", "warning")
         return redirect(url_for("blogging.index"))
@@ -278,7 +313,17 @@ def posts_by_tag(tag, count, page):
         posts_by_tag_processed.send(blogging_engine.app,
                                     engine=blogging_engine,
                                     posts=posts, meta=meta)
-        tags = storage.get_tags(auth=meta["is_user_blogger"])
+        uid = None
+        try:
+            uid = current_user.id
+        except AttributeError:
+            uid = None
+        tags = storage.get_tags(auth=meta["is_user_blogger"], uid=uid)
+        for post in posts:
+            if post["public"] is 0 and int(post["user_id"]) != uid:
+                post["display"] = False
+            else:
+                post["display"] = True
         return render_template("blogging/index.html", posts=posts, meta=meta,
                                config=config, tags=tags)
     else:
@@ -309,7 +354,7 @@ def posts_by_author(user_id, count, page):
         posts_by_author_processed.send(blogging_engine.app,
                                        engine=blogging_engine, posts=posts,
                                        meta=meta)
-        tags = storage.get_tags(auth=meta["is_user_blogger"])
+        tags = storage.get_tags(auth=meta["is_user_blogger"], uid=user_id)
         return render_template("blogging/index.html", posts=posts, meta=meta,
                                config=config, tags=tags)
     else:

@@ -120,4 +120,4 @@ if __name__ == "__main__":
         context = ('server.crt', 'server.key')
         app.run(debug=True, host='::', port=443, use_reloader=True, ssl_context=context)
     else:
-        app.run(debug=True, host='::', port=80, use_reloader=True)
+        app.run(debug=True, host='::', port=8000, use_reloader=True)

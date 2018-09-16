@@ -61,9 +61,17 @@
         {% block sidebar %}
         {% endblock sidebar %}
       <div class="pure-u-1">
+        <br />
         <div id="footer">
-            Copyright © 2018 <a href="/" rel="nofollow" style="color:gray">{{config.BLOGGING_AUTHOR}}</a> |
-          <a rel="nofollow" target="_blank" href="{{config.BLOGGING_SITEURL}}" style="color:gray">Personal BLog</a>
+            Copyright © 2018
+            <a href="{{url_for("blogging.about")}}" rel="nofollow" style="color:gray">{{config.BLOGGING_AUTHOR}}</a>
+            | Powered by
+            <a href="http://flask.pocoo.org/" rel="nofollow" target="_blank" style="color:gray">flask</a>
+            &
+            <a href="https://flask-blogging.readthedocs.io/en/latest/" rel="nofollow" target="_blank" style="color:gray">flask_blogging</a>
+            &
+            <a href="http://pandao.github.io/editor.md/" rel="nofollow" target="_blank" style="color:gray">editor.md</a>
+            | Theme maupassant
           <br>
         </div>
       </div>

@@ -8,3 +8,4 @@ static/upload/*.jpeg
 static/upload/*.git
 static/upload/*.bmp
 static/upload/*.webp
+.DS_Store

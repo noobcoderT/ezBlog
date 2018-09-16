@@ -203,16 +203,20 @@ def archives(count, page):
     all_posts = storage.get_posts(count=None, offset=None, include_draft=False,
                               tag=None, user_id=None, recent=True)
     max_posts = meta["max_posts"]
-    for post in all_posts:
-        if meta["is_user_blogger"] is False and post["public"] is 0:
-            max_posts -= 1
-    meta["max_posts"] = max_posts
     uid = None
     try:
         uid = current_user.id
     except AttributeError:
         uid = None
+    for post in all_posts:
+        if int(post["user_id"]) != uid and post["public"] is 0:
+            max_posts -= 1
+    meta["max_posts"] = max_posts
     for post in posts:
+        if int(post["user_id"]) != uid and post["public"] is 0:
+            post["display"] = False
+        else:
+            post["display"] = True
         year = post["post_date"].strftime("%Y")
         if year not in year_dict:
             year_dict[year] = []
@@ -285,7 +289,7 @@ def page_by_id(post_id, slug):
                                meta=meta, tags=tags, prev_post=prev_post,next_post=next_post)
         else:
             flash("You do not have the rights to view this post!", "warning")
-            return redirect(url_for("blogging.archives"))
+            return redirect(url_for("blogging.index"))
     else:
         flash("The page you are trying to access is not valid!", "warning")
         return redirect(url_for("blogging.index"))
@@ -348,9 +352,18 @@ def posts_by_author(user_id, count, page):
     render = config.get("BLOGGING_RENDER_TEXT", True)
     posts_by_author_fetched.send(blogging_engine.app, engine=blogging_engine,
                                  posts=posts, meta=meta)
+    uid = None
+    try:
+        uid = current_user.id
+    except AttributeError:
+        uid = None
     if len(posts):
         for post in posts:
             blogging_engine.process_post(post, render=render)
+            if int(post["user_id"]) != uid and post["public"] is 0:
+                post["display"] = False
+            else:
+                post["display"] = True
         posts_by_author_processed.send(blogging_engine.app,
                                        engine=blogging_engine, posts=posts,
                                        meta=meta)

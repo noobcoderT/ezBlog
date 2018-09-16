@@ -36,11 +36,13 @@
         <ul class="listing">
         {% for post in year.posts %}
           {% if ((meta.is_user_blogger) or (post.public)) %}
+          {% if post.display %}
           <li>
             <span class="date">{{post.post_date.strftime('%Y.%m.%d')}}</span>
             <a href="{{post.url}}"
                title="{{post.title}}">{{post.title}}</a>
           </li>
+          {% endif %}
           {% endif %}
         {% endfor %}
         </ul>

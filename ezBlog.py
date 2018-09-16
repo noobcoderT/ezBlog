@@ -20,7 +20,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SECRET_KEY"] = "ezBlog"  # for WTF-forms and login
 app.config["BLOGGING_URL_PREFIX"] = "/blog"
 app.config["BLOGGING_SITEURL"] = "http://traceme.space"
-app.config["BLOGGING_AUTHOR"] = "Ziv"
+app.config["BLOGGING_AUTHOR"] = "Ziv & Ada"
 app.config["BLOGGING_SITENAME"] = "ezBlog"
 app.config["FILEUPLOAD_IMG_FOLDER"] = "data/img"  #img will not upload here, i do not know why
 app.config["FILEUPLOAD_PREFIX"] = "/fileupd"
@@ -120,4 +120,4 @@ if __name__ == "__main__":
         context = ('server.crt', 'server.key')
         app.run(debug=True, host='::', port=443, use_reloader=True, ssl_context=context)
     else:
-        app.run(debug=True, host='::', port=8000, use_reloader=True)
+        app.run(debug=True, host='::', port=80, use_reloader=True)

@@ -179,3 +179,7 @@ button,input,optgroup,select,textarea {
 code {
   vertical-align:top;
 }
+
+#sidebar-toc a {
+  color: #6e7173;
+}

@@ -126,6 +126,13 @@
         <a href="{{link.link}}" title="{{link.name}}" target="_blank">{{link.name}}</a>
         {% endfor %}
       </div>
+      <div class="widget" style="margin-bottom:10px">
+        <div class="widget-title">
+            <i class="fa fa-list">目录</i>
+        </div>
+      </div>
+      <div style="padding:0" class="markdown-body editormd-preview-container" id="sidebar-toc">
+      </div>
     </div>
   </div>
 {% endblock sidebar %}
@@ -149,7 +156,7 @@
           htmlDecode      : "style,script,iframe|on*",
           path            : "/static/libs/editor.md/lib/",
           tocm            : true,
-          toContainer     : "",
+          tocContainer    : "#sidebar-toc",
           emoji           : true,
           taskList        : true,
           tex             : true,  // 默认不解析

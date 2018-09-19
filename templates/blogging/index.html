@@ -160,6 +160,8 @@
         <a href="{{link.link}}" title="{{link.name}}" target="_blank">{{link.name}}</a>
         {% endfor %}
       </div>
+      <div style="display:none" id="nodisplay-toc">
+      </div>
     </div>
   </div>
 {% endblock sidebar %}
@@ -183,7 +185,7 @@
       htmlDecode      : "style,script,iframe|on*",
       path            : "/static/libs/editor.md/lib/",
       tocm            : false,
-      toContainer     : "",
+      tocContainer     : "#nodisplay-toc",
       emoji           : true,
       taskList        : true,
       tex             : true,  // 默认不解析

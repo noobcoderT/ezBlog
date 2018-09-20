@@ -11,6 +11,7 @@
 {% block extrastyle %}
   <!--link rel="stylesheet" href="/static/libs/editor.md/css/style.css" /-->
   <link rel="stylesheet" href="/static/libs/editor.md/css/editormd.preview.css" />
+  <link rel="stylesheet" href="/static/css/myaffix.css" />
 {% endblock extrastyle %}
 
 {% block navmenu %}
@@ -126,12 +127,12 @@
         <a href="{{link.link}}" title="{{link.name}}" target="_blank">{{link.name}}</a>
         {% endfor %}
       </div>
-      <div class="widget" style="margin-bottom:10px">
+      <div class="sidebar-toc" style="border:1px solid #ddd">
         <div class="widget-title">
             <i class="fa fa-list">目录</i>
         </div>
-      </div>
-      <div style="padding:0" class="markdown-body editormd-preview-container" id="sidebar-toc">
+        <div style="padding-left:0" class="markdown-body editormd-preview-container" id="sidebar-toc">
+        </div>
       </div>
     </div>
   </div>
@@ -147,6 +148,8 @@
 <script src="/static/libs/editor.md/lib/flowchart.min.js"></script>
 <script src="/static/libs/editor.md/lib/jquery.flowchart.min.js"></script>
 <script src="/static/libs/editor.md/js/editormd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js">
+</script>
 <script type="text/javascript">
   var viewEditor;
   $(function(){
@@ -165,6 +168,25 @@
       });
     });
   });
+</script>
+<script type="text/javascript">
+    var tocTop = $(".sidebar-toc").offset().top;
+    var sidebarwid = document.getElementsByClassName("widget")[0].clientWidth;
+    document.getElementById("sidebar-toc").style.width = sidebarwid+'px';
+    window.addEventListener("resize", winresize);
+    var docheight = document.documentElement.clientHeight;
+    document.getElementById("sidebar-toc").style.maxHeight = docheight*0.7+'px';
+    function winresize(){
+        var sidebarwid = document.getElementsByClassName("widget")[0].clientWidth;
+        document.getElementById("sidebar-toc").style.width = sidebarwid+'px';
+        var docheight = document.documentElement.clientHeight;
+        document.getElementById("sidebar-toc").style.maxHeight = docheight*0.7+'px';
+    }
+    $('.sidebar-toc').affix({
+        offset: {
+            top: tocTop,
+        }
+    });
 </script>
 <script type="text/javascript">
   function confirmDelete(url_str){

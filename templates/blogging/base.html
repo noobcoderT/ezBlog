@@ -28,8 +28,8 @@
   {% block extrastyle %}
   {% endblock extrastyle %}
 </head>
-<body>
-  <div class="body_container">
+<body style="background:#f7f8fa">
+  <div class="body_container" style="background:white">
     <div id="header">
       <div class="site-name">
         <h1 class="hidden">ezBlog</h1>
@@ -44,7 +44,7 @@
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       {% for category, message in messages %}
-      <div class="pure-u-1">
+      <div class="pure-u-1 pure-u-md-3-4">
         <div class="content_container">
           <div class="alert alert-{{ category }} alert-dismissible" style="text-align:center;margin-left:30%;margin-right:30%">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -62,7 +62,7 @@
         {% endblock sidebar %}
       <div class="pure-u-1">
         <br />
-        <div id="footer">
+        <div id="footer" class="pure-u-1 pure-u-md-3-4">
             Copyright © 2018
             <a href="{{url_for("blogging.about")}}" rel="nofollow" style="color:gray">{{config.BLOGGING_AUTHOR}}</a>
             | Powered by

@@ -1,0 +1,46 @@
+.sidebar-toc.affix {
+    position: fixed;
+    top: 10px;
+    margin-left: 0;
+    border-left:1px solid #ddd;
+    padding-left:0;
+    margin-top:0;
+    word-wrap:break-word;
+    color:#6e7173;
+    line-height:2.7;
+    font-size:16px;
+    display:block;
+    font-weight:400;
+}
+
+.sidebar-toc.affix-top {
+    border-left: none;
+    color:#6e7173;
+    line-height:2.7;
+    font-size:16px;
+    display:block;
+    font-weight:400;
+    overflow: hidden;
+    padding-left: 0;
+    margin-top: 10px;
+}
+
+#sidebar-toc{
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.markdown-toc.editormd-markdown-toc {
+    margin: 0;
+    max-height: inherit;
+}
+
+ul.markdown-toc-list {
+    margin: 0;
+    max-height: inherit;
+}
+
+li, ul, ol{
+    list-style:none;
+    margin-left:-5px;
+}

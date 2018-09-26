@@ -40,7 +40,7 @@ ul.markdown-toc-list {
     max-height: inherit;
 }
 
-li, ul, ol{
+#sidebar-toc li, #sidebar-toc ul, #sidebar-toc ol{
     list-style:none;
     margin-left:-5px;
 }

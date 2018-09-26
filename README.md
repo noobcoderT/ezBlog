@@ -1,6 +1,23 @@
 # ezBlog
 An easy Blog written by python, flask, flask-blogging and using maupassant theme.
 
+## Example
+[My blog](https://traceme.space)
+### index page
+![index](https://github.com/noobcoderT/ezBlog/blob/master/screenshot/index.png)
+### post page
+![post-1](https://github.com/noobcoderT/ezBlog/blob/master/screenshot/post-1.png)
+![post-2](https://github.com/noobcoderT/ezBlog/blob/master/screenshot/post-2.png)
+### archives page
+![archives](https://github.com/noobcoderT/ezBlog/blob/master/screenshot/archives.png)
+### login page
+![login](https://github.com/noobcoderT/ezBlog/blob/master/screenshot/login.png)
+### writing post page
+![write](https://github.com/noobcoderT/ezBlog/blob/master/screenshot/write.png)
+
+## Introduce
+[快速搭建属于自己的博客](https://traceme.space/blog/page/1/)
+
 ## How to use
 0. virtualenv is recommanded.
 
